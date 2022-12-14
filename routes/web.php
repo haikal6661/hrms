@@ -20,3 +20,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+//----------Module Staff routes start----------
+require __DIR__.'/module/module-staff.php';
+//----------Module Staff routes end----------
