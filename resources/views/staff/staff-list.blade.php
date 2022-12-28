@@ -8,6 +8,9 @@
             <div class="col-sm-6">
                 <h1 class="m-0">Staff</h1><br>
             </div>
+            <div class="col-sm-6">
+            <div id="response" style="float: right;" role="alert"></div>
+            </div>
             <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
@@ -23,6 +26,7 @@
                             <tr>
                                 <th style="width: 10px">No.</th>
                                 <th>Name</th>
+                                <th>Email</th>
                                 <th>Position</th>
                                 <th>Department</th>
                                 <th>Phone</th>
@@ -30,18 +34,17 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @foreach ($stafflist as $staff)
                             <tr>
-                                <td>1.</td>
-                                <td>Update software</td>
-                                <td>
-                                <div class="progress progress-xs">
-                                    <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
-                                </div>
-                                </td>
-                                <td><span class="badge bg-danger">55%</span></td>
-                                <td></td>
+                                <td>{{$loop->index+1}}</td>
+                                <td>{{$staff->fullname}}</td>
+                                <td>{{$staff->email}}</td>
+                                <td>{{$staff->hasPosition->desc ?? 'Not Assigned'}}</td>
+                                <td>{{$staff->hasDepartment->desc ?? 'Not Assigned'}}</td>
+                                <td>{{$staff->phone_no}}</td>
                                 <td></td>
                             </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -83,6 +86,22 @@
                         <span class="fas fa-envelope"></span>
                         </div>
                     </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <select class="form-control select2" name="position_id" style="width: 100%;" id="position">
+                            <option selected="selected" value="">Please select position...</option>
+                            @foreach ($refposition as $position)
+                            <option value="{{$position->id}}">{{$position->desc}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="input-group mb-3">
+                        <select class="form-control select2" name="department_id" style="width: 100%;" id="department">
+                            <option selected="selected" value="">Please select department...</option>
+                            @foreach ($refdepartment as $department)
+                            <option value="{{$department->id}}">{{$department->desc}}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="input-group mb-3">
                     <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Password" required autocomplete="new-password">
@@ -129,6 +148,7 @@
 <script type="text/javascript">
 
     function submitRegister(data) {
+    $('#registerModal').modal('hide');
     console.log("hehe");
     $.ajax({
         url: "{{ route('staff.staff-store') }}",
@@ -138,10 +158,13 @@
         contentType: false,
         processData: false,
         method: 'POST',
-        success: function() {
+        success: function(response) {
+            console.log(response);
+            toastr.success(response['message']);
             // $('#response').html('<span class="text-success">'+response.message+'</span>').fadeIn(500).fadeOut(5000);
-            // window.location = response['url'];
-            alert('submitted');
+            setTimeout(function (){
+                window.location = response['url'];
+            }, 3000);
         },
         error: function(response) {
             // parent.stopLoading();

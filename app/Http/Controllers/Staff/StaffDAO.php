@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Staff;
 use App\Http\Controllers\Controller;
+use App\Models\Staff;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -18,14 +19,32 @@ class StaffDAO extends Controller {
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-        $data = [
+        $user_data = [
             'name' => $request['name'],
             'username' => $request['username'],
             'email' => $request['email'],
             'password' => Hash::make($request['password']),
         ];
 
-        User::create($data);
+        $user = User::create($user_data);
+        $user_id = $user->id;
+
+        $staff_data = [
+            'user_id' => $user_id,
+            'fullname' => $request['name'],
+            'email' => $request['email'],
+            'position_id' => $request['position_id'],
+            'department_id' => $request['department_id'],
+        ];
+
+        $url = route('staff.staff-list');
+
+        Staff::create($staff_data);
+
+        return $response = [
+            'message' => "Staff added successfully.",
+            'url' => $url,
+        ];
     }
 }
 

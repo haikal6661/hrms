@@ -13,6 +13,8 @@
   <link rel="stylesheet" href="{{asset('backend/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('backend/dist/css/adminlte.min.css')}}">
+  <!-- Toaster Notification -->
+  <link rel="stylesheet" href="{{asset('toaster/toastr.min.css')}}">
 
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 </head>
@@ -70,6 +72,64 @@
 <script src="{{asset('backend/plugins/jquery-mapael/maps/usa_states.min.js')}}"></script>
 <!-- ChartJS -->
 <script src="{{asset('backend/plugins/chart.js/Chart.min.js')}}"></script>
+<!-- Start Toaster & Sweetalert -->
+<script src="{{ asset('toaster/toastr.min.js')}}"></script>
+<script src="{{ asset('toaster/sweetalert.min.js') }}"></script>
+<!-- Select2 -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+<script>
+  @if(Session::has('message'))
+    var type="{{Session::get('alert-type','info')}}"
+    switch(type){
+        case 'info':
+              toastr.info("{{ Session::get('message') }}");
+              break;
+        case 'success':
+            toastr.success("{{ Session::get('message') }}");
+            break;
+        case 'warning':
+            toastr.warning("{{ Session::get('message') }}");
+            break;
+        case 'error':
+            toastr.error("{{ Session::get('message') }}");
+            break;
+    }
+  @endif
+</script>
+<script>  
+
+$(function(){
+    var current = location.pathname;
+    $('li a').each(function(){
+        var $this = $(this);
+        // if the current path is like this link, make it active
+        if($this.attr('href').indexOf(current) !== -1){
+            $this.addClass('active');
+        }
+    })
+})
+
+    $(document).on("click", "#delete", function(e){
+        e.preventDefault();
+        var link = $(this).attr("href");
+          swal({
+            title: "Are you Want to delete?",
+            text: "Once Delete, This will be Permanently Delete!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          })
+          .then((willDelete) => {
+            if (willDelete) {
+                  window.location.href = link;
+            } else {
+              swal("Safe Data!");
+            }
+          });
+      });
+</script>
+<!-- End Toaster & Sweetalert -->
 </body>
 </html>

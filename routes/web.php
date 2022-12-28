@@ -24,3 +24,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 //----------Module Staff routes start----------
 require __DIR__.'/module/module-staff.php';
 //----------Module Staff routes end----------
+
+//----------Module Leave routes start----------
+require __DIR__.'/module/module-leave.php';
+//----------Module Leave routes end----------
