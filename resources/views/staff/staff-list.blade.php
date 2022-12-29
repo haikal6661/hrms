@@ -54,7 +54,7 @@
                                             data-toggle="modal" data-target="#viewModal" data-id="{{$staff->id}}"><i class="fa fa-eye"></i></button>
                                         </div>
                                         <div class="col-4">
-                                            <button type="button" class="btn btn-success btn-sm edit" title="Edit"><i class="fa fa-user-edit"></i></button>
+                                            <a href="{{route('staff.staff-edit',['id' => $staff->id])}}" class="btn btn-success btn-sm edit" role="button" title="Edit"><i class="fa fa-user-edit"></i></a>
                                         </div>
                                         <div class="col-4">
                                             <button type="button" class="btn btn-danger btn-sm delete" title="Delete"><i class="fa fa-trash-alt"></i></button>
@@ -73,7 +73,8 @@
                 <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="registerModalLabel">Register New Staff</h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">X</button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
                 </div>
                 <div class="modal-body">
                 <div class="card-body">
@@ -106,20 +107,30 @@
                     </div>
                     </div>
                     <div class="input-group mb-3">
-                        <select class="form-control select2" name="position_id" style="width: 100%;" id="position">
+                        <select class="form-control select2" name="position_id" id="position">
                             <option selected="selected" value="">Please select position...</option>
                             @foreach ($refposition as $position)
                             <option value="{{$position->id}}">{{$position->desc}}</option>
                             @endforeach
                         </select>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                            <span class="fas fa-briefcase"></span>
+                            </div>
+                        </div>
                     </div>
                     <div class="input-group mb-3">
-                        <select class="form-control select2" name="department_id" style="width: 100%;" id="department">
+                        <select class="form-control select2" name="department_id" id="department">
                             <option selected="selected" value="">Please select department...</option>
                             @foreach ($refdepartment as $department)
                             <option value="{{$department->id}}">{{$department->desc}}</option>
                             @endforeach
                         </select>
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                            <span class="fas fa-building"></span>
+                            </div>
+                        </div>
                     </div>
                     <div class="input-group mb-3">
                     <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Password" required autocomplete="new-password">
@@ -154,7 +165,8 @@
                 <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="viewModalLabel"></h5>
-                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">X</button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
                 </div>
                 <div class="modal-body">
                 <div class="card-body">

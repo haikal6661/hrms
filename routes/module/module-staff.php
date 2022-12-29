@@ -16,7 +16,6 @@ Route::group(['prefix' => 'staff', 'as' => 'staff', 'middleware' => 'auth'], fun
     })->name('.staff-store');
 
     //show staff page
-
     Route::get('/staff-list', function(Request $request){
 
         $refposition = RefPosition::all();
@@ -29,6 +28,25 @@ Route::group(['prefix' => 'staff', 'as' => 'staff', 'middleware' => 'auth'], fun
             'stafflist' => $stafflist,
         ]);
     })->name('.staff-list');
+
+    //edit staff page
+    Route::get('/staff-edit', function(Request $request){
+
+        $detail = [];
+
+        $staff_id = $request->id;
+
+        $detail = Staff::find($staff_id);
+        $refposition = RefPosition::all();
+        $refdepartment = RefDepartment::all();
+
+        return view('staff.staff-edit', [
+            'detail' => $detail,
+            'refposition' => $refposition,
+            'refdepartment' => $refdepartment,
+        ]);
+
+    })->name('.staff-edit');
 
     Route::get('/getStaffDetail', function(Request $request){
 
