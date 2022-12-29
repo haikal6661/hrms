@@ -29,6 +29,18 @@ Route::group(['prefix' => 'staff', 'as' => 'staff', 'middleware' => 'auth'], fun
             'stafflist' => $stafflist,
         ]);
     })->name('.staff-list');
+
+    Route::get('/getStaffDetail', function(Request $request){
+
+        $staff_id = $request->data;
+
+        $detail = Staff::where('id', $staff_id)->with('hasPosition','hasDepartment')->first();
+
+        return response()->json([$detail]);
+
+
+    })->name('.getStaffDetail');
+
 });
 
 

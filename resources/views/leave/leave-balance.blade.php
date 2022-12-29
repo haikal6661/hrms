@@ -25,17 +25,23 @@
                         <thead>
                             <tr>
                                 <th style="width: 10px">No.</th>
-                                <th>Name</th>
-                                <th>Leaves Balance</th>
-                                <th>Action</th>
+                                <th style="width: 60%;">Name</th>
+                                <th>Leaves Balance (Days)</th>
+                                <th style="width: 140px;">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>1</td>
+                                <td>Naim</td>
+                                <td>100</td>
+                                <td>
+                                <div class="row">
+                                        <div class="col-4">
+                                            <button type="button" class="btn btn-success btn-sm edit" title="Edit Balance"><i class="fa fa-edit"></i></button>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
