@@ -79,6 +79,12 @@
                   <p>Leave Balance</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{route ('leave.leave-entitlement')}}" class="nav-link">
+                  <!-- <i class="far fa-circle nav-icon"></i> -->
+                  <p>Leave Entitlement</p>
+                </a>
+              </li>
             </ul>
           </li>
           <li class="nav-item">

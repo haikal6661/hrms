@@ -35,7 +35,7 @@
                                 <th>Name</th>
                                 <th>Position</th>
                                 <th>Department</th>
-                                <th>Phone</th>
+                                <th>Supervisor</th>
                                 <th style="width: 140px;">Action</th>
                             </tr>
                         </thead>
@@ -46,7 +46,7 @@
                                 <td>{{$staff->fullname}}</td>
                                 <td>{{$staff->hasPosition->desc ?? 'Not Assigned'}}</td>
                                 <td>{{$staff->hasDepartment->desc ?? 'Not Assigned'}}</td>
-                                <td>{{$staff->phone_no}}</td>
+                                <td>{{$staff->hasSupervisor->fullname ?? 'Not Assigned'}}</td>
                                 <td>
                                     <div class="row">
                                         <div class="col-4">
@@ -83,7 +83,8 @@
                 <form id="register_form">
                     @csrf
                     <div class="input-group mb-3">
-                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Full Name" required autocomplete="name" autofocus>
+                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Full Name" required 
+                    oninput="this.value = this.value.toUpperCase()" autocomplete="name" autofocus>
                     <div class="input-group-append">
                         <div class="input-group-text">
                         <span class="fas fa-user"></span>
@@ -147,6 +148,10 @@
                         <span class="fas fa-lock"></span>
                         </div>
                     </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input style="margin-left: 0px;" class="form-check-input" type="checkbox" name="is_supervisor" id="is_supervisor" value="1">
+                        <label style="padding-left: 20px;" for="is_supervisor" class="form-check-label">Supervisor</label>
                     </div>
                 </div>
                 </div>
@@ -283,7 +288,7 @@ $(".view").click(function() {
                 $('#view_phone_no').html(response[0].phone_no);
                 $('#view_position').html(response[0].has_position.desc);
                 $('#view_department').html(response[0].has_department.desc);
-                $('#view_supervisor').html(response[0].supervisor);
+                $('#view_supervisor').html(response[0].has_supervisor.fullname);
             }else{
                 // $('#staff_id').val(response[0].id);
                 // $('#nama_pegawai').html(response[0].name);

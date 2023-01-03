@@ -21,15 +21,19 @@ return new class extends Migration
             $table->string('email',50)->nullable();
             $table->string('ic_no',14)->nullable();
             $table->string('address',150)->nullable();
-            $table->integer('phone_no')->nullable();
+            $table->string('phone_no',12)->nullable();
             $table->unsignedBigInteger('position_id')->nullable();
             $table->foreign('position_id')->references('id')->on('ref_position');
             $table->unsignedBigInteger('department_id')->nullable();
             $table->foreign('department_id')->references('id')->on('ref_department');
-            $table->string('supervisor',2)->nullable();
+            $table->unsignedBigInteger('supervisor_id')->nullable();
+            $table->foreign('supervisor_id')->references('id')->on('staff');
             $table->string('is_supervisor',2)->nullable();
             $table->string('status_id',2)->nullable();
-            $table->string('leave_id',2)->nullable();
+            $table->unsignedBigInteger('leave_entitlement_id')->nullable();
+            $table->foreign('leave_entitlement_id')->references('id')->on('staff_leave_entitlement');
+            $table->unsignedBigInteger('leave_balance_id')->nullable();
+            $table->foreign('leave_balance_id')->references('id')->on('staff_leave_balance');
             $table->timestamps();
         });
     }

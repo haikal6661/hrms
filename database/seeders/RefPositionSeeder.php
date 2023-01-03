@@ -23,77 +23,77 @@ class RefPositionSeeder extends Seeder
             0 =>
             array (
                 'code' => '01',
-                'desc' => 'Chief information officer (CIO)',
+                'desc' => 'Chief Information Officer (CIO)',
                 'created_at' => Carbon::now(),
                 'updated_at' => NULL,
             ),
             1 =>
             array (
                 'code' => '02',
-                'desc' => 'Chief technology officer (CTO)',
+                'desc' => 'Chief Technology Officer (CTO)',
                 'created_at' => Carbon::now(),
                 'updated_at' => NULL,
             ),
             2 =>
             array (
                 'code' => '03',
-                'desc' => 'Solutions architect',
+                'desc' => 'Solutions Architect',
                 'created_at' => Carbon::now(),
                 'updated_at' => NULL,
             ),
             3 =>
             array (
                 'code' => '04',
-                'desc' => 'Technical architect',
+                'desc' => 'Technical Architect',
                 'created_at' => Carbon::now(),
                 'updated_at' => NULL,
             ),
             4 =>
             array (
                 'code' => '05',
-                'desc' => 'Network administrator',
+                'desc' => 'Network Administrator',
                 'created_at' => Carbon::now(),
                 'updated_at' => NULL,
             ),
             5 =>
             array (
                 'code' => '06',
-                'desc' => 'Network engineer',
+                'desc' => 'Network Engineer',
                 'created_at' => Carbon::now(),
                 'updated_at' => NULL,
             ),
             6 =>
             array (
                 'code' => '07',
-                'desc' => 'DevOps engineer',
+                'desc' => 'DevOps Engineer',
                 'created_at' => Carbon::now(),
                 'updated_at' => NULL,
             ),
             7 =>
             array (
                 'code' => '08',
-                'desc' => 'Web developer',
+                'desc' => 'Web Developer',
                 'created_at' => Carbon::now(),
                 'updated_at' => NULL,
             ),
             8 =>
             array (
                 'code' => '09',
-                'desc' => 'Help desk support specialist',
+                'desc' => 'Help Desk support specialist',
                 'created_at' => Carbon::now(),
                 'updated_at' => NULL,
             ),
             9 =>
             array (
                 'code' => '10',
-                'desc' => 'Project manager',
+                'desc' => 'Project Manager',
                 'created_at' => Carbon::now(),
                 'updated_at' => NULL,
             ),
             10 =>
             array (
                 'code' => '11',
-                'desc' => 'Business analytics (BA)',
+                'desc' => 'Business Analytics (BA)',
                 'created_at' => Carbon::now(),
                 'updated_at' => NULL,
             ),

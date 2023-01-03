@@ -39,20 +39,28 @@ Route::group(['prefix' => 'staff', 'as' => 'staff', 'middleware' => 'auth'], fun
         $detail = Staff::find($staff_id);
         $refposition = RefPosition::all();
         $refdepartment = RefDepartment::all();
+        $refsupervisor = Staff::where('is_supervisor','!=', null)->get();
 
         return view('staff.staff-edit', [
             'detail' => $detail,
             'refposition' => $refposition,
             'refdepartment' => $refdepartment,
+            'refsupervisor' => $refsupervisor,
         ]);
 
     })->name('.staff-edit');
+
+    //update staff
+    Route::post('/staff-update', function(Request $request){
+        $StaffDAO = new StaffDAO();
+        return $StaffDAO->updateStaff($request);
+    })->name('.staff-update');
 
     Route::get('/getStaffDetail', function(Request $request){
 
         $staff_id = $request->data;
 
-        $detail = Staff::where('id', $staff_id)->with('hasPosition','hasDepartment')->first();
+        $detail = Staff::where('id', $staff_id)->with('hasPosition','hasDepartment','hasSupervisor','hasLeaveEntitlement','hasLeaveBalance')->first();
 
         return response()->json([$detail]);
 

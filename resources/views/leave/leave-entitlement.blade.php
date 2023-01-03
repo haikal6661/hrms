@@ -16,7 +16,7 @@
                 <div class="col-md-12">
                 <div class="card">
                     <div style="display: inline-flex;" class="card-header">
-                    <h3 class="card-title col-md-11">List of staff leave balance (Days)</h3>
+                    <h3 class="card-title col-md-11">List of staff leave entitlement (Days)</h3>
                     <!-- <button type="button" class="btn btn-success btn-block btn-sm" title="Register new staff" data-toggle="modal" data-target="#registerModal">
                         <i class="fa fa-plus"></i> Staff</button> -->
                 </div>
@@ -41,18 +41,18 @@
                             <tr>
                                 <td>{{$loop->index+1}}</td>
                                 <td>{{$staff->fullname}}</td>
-                                <td>{{$staff->hasLeaveBalance->annual_leave ?? '-'}}</td>
-                                <td>{{$staff->hasLeaveBalance->sick_leave ?? '-'}}</td>
-                                <td>{{$staff->hasLeaveBalance->paternity_leave ?? '-'}}</td>
-                                <td>{{$staff->hasLeaveBalance->maternity_leave ?? '-'}}</td>
-                                <td>{{$staff->hasLeaveBalance->marriage_leave ?? '-'}}</td>
-                                <td>{{$staff->hasLeaveBalance->compassionate_leave ?? '-'}}</td>
-                                <td>{{$staff->hasLeaveBalance->unpaid_leave ?? '-'}}</td>
+                                <td>{{$staff->hasLeaveEntitlement->annual_leave ?? '-'}}</td>
+                                <td>{{$staff->hasLeaveEntitlement->sick_leave ?? '-'}}</td>
+                                <td>{{$staff->hasLeaveEntitlement->paternity_leave ?? '-'}}</td>
+                                <td>{{$staff->hasLeaveEntitlement->maternity_leave ?? '-'}}</td>
+                                <td>{{$staff->hasLeaveEntitlement->marriage_leave ?? '-'}}</td>
+                                <td>{{$staff->hasLeaveEntitlement->compassionate_leave ?? '-'}}</td>
+                                <td>{{$staff->hasLeaveEntitlement->unpaid_leave ?? '-'}}</td>
                                 <td>
                                 <div class="row">
                                         <div class="col-4">
-                                            <button type="button" class="btn btn-success btn-sm edit" title="Edit Balance" 
-                                            data-toggle="modal" data-target="#leaveBalanceModal" data-id="{{$staff->id}}"><i class="fa fa-edit"></i></button>
+                                            <button type="button" class="btn btn-success btn-sm edit" title="Edit Entitlement" 
+                                            data-toggle="modal" data-target="#leaveEntitlementModal" data-id="{{$staff->id}}"><i class="fa fa-edit"></i></button>
                                         </div>
                                     </div>
                                 </td>
@@ -61,11 +61,11 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="modal fade" id="leaveBalanceModal" tabindex="-1" aria-labelledby="leaveBalanceModalLabel" aria-hidden="true">
+                <div class="modal fade" id="leaveEntitlementModal" tabindex="-1" aria-labelledby="leaveEntitlementModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="leaveBalanceModalLabel">Leave Balance</h5>
+                    <h5 class="modal-title" id="leaveEntitlementModalLabel">Leave Entitlement</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                 </div>
@@ -73,7 +73,7 @@
                 <div class="card-body">
                 <p class="login-box-msg"></p>
                 
-                <form id="leave_balance">
+                <form id="leave_entitlement">
                     @csrf
                     <input type="hidden" id="staff_id" name="staff_id" value="">
                     <div class="form-group row">
@@ -148,11 +148,11 @@
 
 $(document).ready(function(){
 
-$('#leave_balance').on('submit', function(e) {
+$('#leave_entitlement').on('submit', function(e) {
         e.preventDefault();
         let formData = new FormData(this);
         // ('#frm_register .hasError').html('');
-        submitLeaveBalance(formData);
+        submitLeaveEntitlement(formData);
 
     });
 });
@@ -176,13 +176,13 @@ $(".edit").click(function() {
                 console.log(response);
                 // $('.view_form').html("");
                 // $('#viewModalLabel').html("View "+response[0].fullname);
-                $('#annual_leave').val(response[0].has_leave_balance.annual_leave);
-                $('#sick_leave').val(response[0].has_leave_balance.sick_leave);
-                $('#paternity_leave').val(response[0].has_leave_balance.paternity_leave);
-                $('#maternity_leave').val(response[0].has_leave_balance.maternity_leave);
-                $('#marriage_leave').val(response[0].has_leave_balance.marriage_leave);
-                $('#compassionate_leave').val(response[0].has_leave_balance.compassionate_leave);
-                $('#unpaid_leave').val(response[0].has_leave_balance.unpaid_leave);
+                $('#annual_leave').val(response[0].has_leave_entitlement.annual_leave);
+                $('#sick_leave').val(response[0].has_leave_entitlement.sick_leave);
+                $('#paternity_leave').val(response[0].has_leave_entitlement.paternity_leave);
+                $('#maternity_leave').val(response[0].has_leave_entitlement.maternity_leave);
+                $('#marriage_leave').val(response[0].has_leave_entitlement.marriage_leave);
+                $('#compassionate_leave').val(response[0].has_leave_entitlement.compassionate_leave);
+                $('#unpaid_leave').val(response[0].has_leave_entitlement.unpaid_leave);
             }else{
                 // $('#staff_id').val(response[0].id);
                 // $('#nama_pegawai').html(response[0].name);
@@ -193,11 +193,11 @@ $(".edit").click(function() {
 
 });
 
-function submitLeaveBalance(data) {
-    $('#leaveBalanceModal').modal('hide');
+function submitLeaveEntitlement(data) {
+    $('#leaveEntitlementModal').modal('hide');
     console.log("hehe");
     $.ajax({
-        url: "{{ route('leave.leave-balance-store') }}",
+        url: "{{ route('leave.leave-entitlement-store') }}",
         type: 'post',
         data: data,
         cache: false,
@@ -218,6 +218,7 @@ function submitLeaveBalance(data) {
 
     });
 }
+
 </script>
 
 @endsection

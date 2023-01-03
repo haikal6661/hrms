@@ -20,10 +20,11 @@ class Staff extends Model
         'phone_no',
         'position_id',
         'department_id',
-        'supervisor',
+        'supervisor_id',
         'is_supervisor',
         'status_id',
-        'leave_id',
+        'leave_entitlement_id',
+        'leave_balance_id',
     ];
 
     public function hasUser(){
@@ -37,5 +38,17 @@ class Staff extends Model
     public function hasDepartment()
     {
         return $this->belongsTo(RefDepartment::class, 'department_id');
+    }
+
+    public function hasSupervisor(){
+        return $this->belongsTo(Staff::class, 'supervisor_id');
+    }
+
+    public function hasLeaveBalance(){
+        return $this->belongsTo(StaffLeaveBalance::class, 'leave_balance_id');
+    }
+
+    public function hasLeaveEntitlement(){
+        return $this->belongsTo(StaffLeaveEntitlement::class, 'leave_entitlement_id');
     }
 }

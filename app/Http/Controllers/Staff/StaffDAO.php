@@ -35,6 +35,7 @@ class StaffDAO extends Controller {
             'email' => $request['email'],
             'position_id' => $request['position_id'],
             'department_id' => $request['department_id'],
+            'is_supervisor' => $request['is_supervisor'],
         ];
 
         $url = route('staff.staff-list');
@@ -46,10 +47,40 @@ class StaffDAO extends Controller {
             'url' => $url,
         ];
     }
+
+    //update staff
+    public function updateStaff(Request $request){
+        
+        $staff_id = $request->staff_id;
+
+        $staff = Staff::find($staff_id);
+
+        $data = [
+            'fullname' => $request->fullname,
+            'email' => $request->email,
+            'ic_no' => $request->ic_no,
+            'address' => $request->address,
+            'phone_no' => $request->phone_no,
+            'position_id' => $request->position_id,
+            'supervisor_id' => $request->supervisor_id,
+            'department_id' => $request->department_id,
+        ];
+
+        $staff->update($data);
+
+        if($staff->update($data)){
+            return $respones = [
+                'message' => "Staff updated successfully.",
+            ];
+        }else{
+            return $respones = [
+                'message' => "Something went wrong.",
+            ];
+        }
+
+        
+    }
 }
-
-
-
 
 
 
