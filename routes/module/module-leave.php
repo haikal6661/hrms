@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\Leave\LeaveDAO;
+use App\Models\RefLeaveType;
 use App\Models\Staff;
+use App\Models\StaffLeaveBalance;
 use App\Models\StaffLeaveEntitlement;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'leave', 'as' => 'leave', 'middleware' => 'auth'], function(){
@@ -43,6 +46,28 @@ Route::group(['prefix' => 'leave', 'as' => 'leave', 'middleware' => 'auth'], fun
         ]);
 
     })->name('.leave-entitlement');
+
+    //show leave form
+    Route::get('/leave-request-form', function(Request $request){
+
+        $detail = [];
+
+        $detail = Auth::user()->hasStaff;
+
+        $refleavetype = RefLeaveType::all();
+
+        return view('leave.leave-request-form', [
+            'refleavetype' => $refleavetype,
+            'detail' => $detail,
+        ]);
+
+    })->name('.leave-request-form');
+
+    //store leave application
+    Route::post('/leave-application', function(Request $request){
+        $LeaveDAO = new LeaveDAO();
+        return $LeaveDAO->storeLeaveApplication($request);
+    })->name('.leave-application');
 
 });
 

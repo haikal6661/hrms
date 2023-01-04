@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('staff_leave_entitlements');
+        Schema::dropIfExists('staff_leave_entitlement');
     }
 };

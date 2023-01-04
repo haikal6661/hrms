@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ref_leave_types');
+        Schema::dropIfExists('ref_leave_type');
     }
 };

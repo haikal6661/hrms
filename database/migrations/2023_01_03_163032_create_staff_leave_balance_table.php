@@ -33,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('staff_leave_balances');
+        Schema::dropIfExists('staff_leave_balance');
     }
 };
