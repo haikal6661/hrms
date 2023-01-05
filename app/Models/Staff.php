@@ -23,8 +23,6 @@ class Staff extends Model
         'supervisor_id',
         'is_supervisor',
         'status_id',
-        'leave_entitlement_id',
-        'leave_balance_id',
     ];
 
     public function hasUser(){
@@ -44,11 +42,7 @@ class Staff extends Model
         return $this->belongsTo(Staff::class, 'supervisor_id');
     }
 
-    public function hasLeaveBalance(){
-        return $this->belongsTo(StaffLeaveBalance::class, 'leave_balance_id');
-    }
-
-    public function hasLeaveEntitlement(){
-        return $this->belongsTo(StaffLeaveEntitlement::class, 'leave_entitlement_id');
+    public function hasLeave(){
+        return $this->hasMany(StaffLeave::class);
     }
 }

@@ -26,13 +26,7 @@
                             <tr>
                                 <th style="width: 10px">No.</th>
                                 <th>Name</th>
-                                <th>Annual</th>
-                                <th>Sick</th>
-                                <th>Paternity</th>
-                                <th>Maternity</th>
-                                <th>Marriage</th>
-                                <th>Compassionate</th>
-                                <th>Unpaid</th>
+                                <th>Leaves</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -41,18 +35,28 @@
                             <tr>
                                 <td>{{$loop->index+1}}</td>
                                 <td>{{$staff->fullname}}</td>
-                                <td>{{$staff->hasLeaveEntitlement->annual_leave ?? '-'}}</td>
-                                <td>{{$staff->hasLeaveEntitlement->sick_leave ?? '-'}}</td>
-                                <td>{{$staff->hasLeaveEntitlement->paternity_leave ?? '-'}}</td>
-                                <td>{{$staff->hasLeaveEntitlement->maternity_leave ?? '-'}}</td>
-                                <td>{{$staff->hasLeaveEntitlement->marriage_leave ?? '-'}}</td>
-                                <td>{{$staff->hasLeaveEntitlement->compassionate_leave ?? '-'}}</td>
-                                <td>{{$staff->hasLeaveEntitlement->unpaid_leave ?? '-'}}</td>
+                                <td>
+                                    <div class="col">
+                                    @for($i=0; $i < count($refleavetype); $i++)
+                                        &nbsp;{{$refleavetype[$i]->desc}} = 
+                                        @foreach ($staff->hasLeave as $entitlement)
+                                            @if($entitlement->leave_type_id == $refleavetype[$i]->id)
+                                            {{$entitlement->entitlement ?? '0'}}
+                                            @endif
+                                        @endforeach
+                                    @endfor
+                                    <!-- @foreach($refleavetype as $leave)
+                                    &nbsp;{{$leave->desc}} = 
+                                        @foreach ($staff->hasLeave as $entitlement)
+                                            {{$entitlement->entitlement}}
+                                        @endforeach
+                                    @endforeach -->
+                                    </div>
+                                </td>
                                 <td>
                                 <div class="row">
                                         <div class="col-4">
-                                            <button type="button" class="btn btn-success btn-sm edit" title="Edit Entitlement" 
-                                            data-toggle="modal" data-target="#leaveEntitlementModal" data-id="{{$staff->id}}"><i class="fa fa-edit"></i></button>
+                                            <a href="{{route('leave.leave-entitlement-edit', ['id' => $staff->id])}}" role="button" class="btn btn-success btn-sm" title="Edit Entitlement"><i class="fa fa-edit"></i></a>
                                         </div>
                                     </div>
                                 </td>
@@ -76,55 +80,21 @@
                 <form id="leave_entitlement">
                     @csrf
                     <input type="hidden" id="staff_id" name="staff_id" value="">
+                    @foreach($refleavetype as $leave)
                     <div class="form-group row">
-                        <label for="" class="col-sm-6 col-form-label">Annual Leave :</label>
+                        <label for="" class="col-sm-6 col-form-label">{{$leave->desc}} :</label>
                         <div class="col-sm-4">
-                        <input type="text" class="form-control" name="annual_leave" id="annual_leave" 
-                        oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
+                        @foreach ($staffList as $key => $staff)
+                            @foreach ($staff->hasLeave as $entitlement)
+                            @if($leave->id == $entitlement->id)
+                            <input type="text" class="form-control" name="leave[{{$leave->leave_type_id}}]" id="{{$leave->id}}" value="{{$entitlement->entitlement}}"
+                            oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
+                            @endif
+                            @endforeach
+                        @endforeach
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label for="" class="col-sm-6 col-form-label">Sick Leave :</label>
-                        <div class="col-sm-4">
-                        <input type="text" class="form-control" name="sick_leave" id="sick_leave" 
-                        oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="" class="col-sm-6 col-form-label">Paternity Leave :</label>
-                        <div class="col-sm-4">
-                        <input type="text" class="form-control" name="paternity_leave" id="paternity_leave" 
-                        oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="" class="col-sm-6 col-form-label">Maternity Leave :</label>
-                        <div class="col-sm-4">
-                        <input type="text" class="form-control" name="maternity_leave" id="maternity_leave" 
-                        oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="" class="col-sm-6 col-form-label">Marriage Leave :</label>
-                        <div class="col-sm-4">
-                        <input type="text" class="form-control" name="marriage_leave" id="marriage_leave" 
-                        oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="" class="col-sm-6 col-form-label">Compassionate Leave :</label>
-                        <div class="col-sm-4">
-                        <input type="text" class="form-control" name="compassionate_leave" id="compassionate_leave" 
-                        oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="" class="col-sm-6 col-form-label">Unpaid Leave :</label>
-                        <div class="col-sm-4">
-                        <input type="text" class="form-control" name="unpaid_leave" id="unpaid_leave" 
-                        oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
                 </div>
                 <div class="modal-footer">
@@ -164,32 +134,32 @@ $(".edit").click(function() {
   console.log(data);
   $(".modal-body #staff_id").val(data);
 
-  var url = '{{ route("staff.getStaffDetail", "data=staff_id") }}';
-    url = url.replace('staff_id', data);
+//   var url = '{{ route("staff.getStaffDetail", "data=staff_id") }}';
+//     url = url.replace('staff_id', data);
 
-    $.ajax({
-        url: url,
-        type: 'get',
-        dataType: 'json',
-        success: function(response) {
-            if (response) {
-                console.log(response);
-                // $('.view_form').html("");
-                // $('#viewModalLabel').html("View "+response[0].fullname);
-                $('#annual_leave').val(response[0].has_leave_entitlement.annual_leave);
-                $('#sick_leave').val(response[0].has_leave_entitlement.sick_leave);
-                $('#paternity_leave').val(response[0].has_leave_entitlement.paternity_leave);
-                $('#maternity_leave').val(response[0].has_leave_entitlement.maternity_leave);
-                $('#marriage_leave').val(response[0].has_leave_entitlement.marriage_leave);
-                $('#compassionate_leave').val(response[0].has_leave_entitlement.compassionate_leave);
-                $('#unpaid_leave').val(response[0].has_leave_entitlement.unpaid_leave);
-            }else{
-                // $('#staff_id').val(response[0].id);
-                // $('#nama_pegawai').html(response[0].name);
-                // $('#penempatan_semasa').html('TIADA');
-            }
-        }
-    });
+//     $.ajax({
+//         url: url,
+//         type: 'get',
+//         dataType: 'json',
+//         success: function(response) {
+//             if (response) {
+//                 console.log(response);
+//                 // $('.view_form').html("");
+//                 // $('#viewModalLabel').html("View "+response[0].fullname);
+//                 $('#annual_leave').val(response[0].has_leave_entitlement.annual_leave);
+//                 $('#sick_leave').val(response[0].has_leave_entitlement.sick_leave);
+//                 $('#paternity_leave').val(response[0].has_leave_entitlement.paternity_leave);
+//                 $('#maternity_leave').val(response[0].has_leave_entitlement.maternity_leave);
+//                 $('#marriage_leave').val(response[0].has_leave_entitlement.marriage_leave);
+//                 $('#compassionate_leave').val(response[0].has_leave_entitlement.compassionate_leave);
+//                 $('#unpaid_leave').val(response[0].has_leave_entitlement.unpaid_leave);
+//             }else{
+//                 // $('#staff_id').val(response[0].id);
+//                 // $('#nama_pegawai').html(response[0].name);
+//                 // $('#penempatan_semasa').html('TIADA');
+//             }
+//         }
+//     });
 
 });
 

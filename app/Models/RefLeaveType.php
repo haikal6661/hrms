@@ -15,4 +15,5 @@ class RefLeaveType extends Model
         'code',
         'desc',
     ];
+    
 }

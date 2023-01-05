@@ -60,7 +60,7 @@ Route::group(['prefix' => 'staff', 'as' => 'staff', 'middleware' => 'auth'], fun
 
         $staff_id = $request->data;
 
-        $detail = Staff::where('id', $staff_id)->with('hasPosition','hasDepartment','hasSupervisor','hasLeaveEntitlement','hasLeaveBalance')->first();
+        $detail = Staff::where('id', $staff_id)->with('hasPosition','hasDepartment','hasSupervisor')->first();
 
         return response()->json([$detail]);
 

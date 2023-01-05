@@ -30,10 +30,6 @@ return new class extends Migration
             $table->foreign('supervisor_id')->references('id')->on('staff');
             $table->string('is_supervisor',2)->nullable();
             $table->string('status_id',2)->nullable();
-            $table->unsignedBigInteger('leave_entitlement_id')->nullable();
-            $table->foreign('leave_entitlement_id')->references('id')->on('staff_leave_entitlement');
-            $table->unsignedBigInteger('leave_balance_id')->nullable();
-            $table->foreign('leave_balance_id')->references('id')->on('staff_leave_balance');
             $table->timestamps();
         });
     }

@@ -4,10 +4,11 @@ namespace App\Http\Controllers\Leave;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Staff\StaffDAO;
 use App\Models\LeaveApplication;
+use App\Models\RefLeaveType;
 use App\Models\Staff;
-use App\Models\StaffLeaveBalance;
-use App\Models\StaffLeaveEntitlement;
+use App\Models\StaffLeave;
 use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\Switch_;
 
 class LeaveDAO extends Controller
 {
@@ -15,57 +16,41 @@ class LeaveDAO extends Controller
 
         $staff_id = $request->staff_id;
         $staff = Staff::find($staff_id);
+        $entitlement = StaffLeave::where('staff_id', $staff_id);
+        
+        if($staff->hasLeave == null){
 
-        if ($staff->leave_entitlement_id == null && $staff->leave_balance_id == null) {
-
-            $staffEntitlement = StaffLeaveEntitlement::create();
-            $staffBalance = StaffLeaveBalance::create();
-            $leaveEntitlementId = $staffEntitlement->id;
-            $leaveBalancetId = $staffBalance->id;
-
-            $staff_entitlement = [
-                'leave_entitlement_id' => $leaveEntitlementId,
-            ];
-
-            $staff_balance = [
-                'leave_balance_id' => $leaveBalancetId,
-            ];
-
-            $staff->update($staff_entitlement);
-            $staff->update($staff_balance);
-
-            $staffEntitlementId = $staff->leave_entitlement_id;
-            $leaveEntitlement = StaffLeaveEntitlement::find($staffEntitlementId);
-
-            $entilementData = [
-                'annual_leave' => $request->annual_leave,
-                'sick_leave' => $request->sick_leave,
-                'paternity_leave' => $request->paternity_leave,
-                'maternity_leave' => $request->maternity_leave,
-                'marriage_leave' => $request->marriage_leave,
-                'compassionate_leave' => $request->compassionate_leave,
-                'unpaid_leave' => $request->unpaid_leave,
-            ];
-
-            $leaveEntitlement->update($entilementData);
-
-        } else {
+            foreach($request->leave as $key => $detail){
             
-            $staffEntitlementId = $staff->leave_entitlement_id;
-            $leaveEntitlement = StaffLeaveEntitlement::find($staffEntitlementId);
+                $data = [
+                    'staff_id' => $staff_id,
+                    'leave_type_id' => $key,
+                    'entitlement' => $detail,
+                ];
+    
+                StaffLeave::create($data);
+    
+            }
+        }else{
+            
+            foreach($request->leave as $key => $detail){
 
-            $entilementData = [
-                'annual_leave' => $request->annual_leave,
-                'sick_leave' => $request->sick_leave,
-                'paternity_leave' => $request->paternity_leave,
-                'maternity_leave' => $request->maternity_leave,
-                'marriage_leave' => $request->marriage_leave,
-                'compassionate_leave' => $request->compassionate_leave,
-                'unpaid_leave' => $request->unpaid_leave,
-            ];
+                // StaffLeave::update([
+                //     'staff_id' => $staff_id,
+                //     'leave_type_id' => $key,
+                //     'entitlement' => $detail,
+                // ]);
+            $entitlement = StaffLeave::where('staff_id', $staff_id)->where('leave_type_id', $key);
 
-            $leaveEntitlement->update($entilementData);
+                $data = [
+                    'entitlement' => $detail,
+                ];
+    
+                $entitlement->update($data);
+            }
         }
+
+        
 
         $url = route('leave.leave-entitlement');
 
@@ -80,25 +65,47 @@ class LeaveDAO extends Controller
 
         $staff_id = $request->staff_id;
         $staff = Staff::find($staff_id);
-        $staffBalanceId = $staff->leave_balance_id;
-        $leaveBalance = StaffLeaveBalance::find($staffBalanceId);
+        $entitlement = StaffLeave::where('staff_id', $staff_id);
+        
+        if($staff->hasLeave == null){
 
-        $balanceData = [
-            'annual_leave' => $request->annual_leave,
-            'sick_leave' => $request->sick_leave,
-            'paternity_leave' => $request->paternity_leave,
-            'maternity_leave' => $request->maternity_leave,
-            'marriage_leave' => $request->marriage_leave,
-            'compassionate_leave' => $request->compassionate_leave,
-            'unpaid_leave' => $request->unpaid_leave,
-        ];
+            foreach($request->leave as $key => $detail){
+            
+                $data = [
+                    'staff_id' => $staff_id,
+                    'leave_type_id' => $key,
+                    'balance' => $detail,
+                ];
+    
+                StaffLeave::create($data);
+    
+            }
+        }else{
+            
+            foreach($request->leave as $key => $detail){
 
-        $leaveBalance->update($balanceData);
+                // StaffLeave::UpdateOrCreate([
+                //     'staff_id' => $staff_id,
+                //     'leave_type_id' => $key,
+                // ],[
+                //     'balance' => $detail,
+                // ]);
+            $balance = StaffLeave::where('staff_id', $staff_id)->where('leave_type_id', $key);
+
+                $data = [
+                    'balance' => $detail,
+                ];
+    
+                $balance->update($data);
+            }
+        }
+
+        
 
         $url = route('leave.leave-balance');
 
         return $response = [
-            'message' => "Balance edited sucessfully.",
+            'message' => "Balance added sucessfully.",
             'url' => $url,
         ];
 
@@ -107,6 +114,8 @@ class LeaveDAO extends Controller
     public function storeLeaveApplication(Request $request){
         
         $staff_id = $request->staff_id;
+        $staff = Staff::find($staff_id);
+        $supervisor = $staff->supervisor_id;
 
         $request->validate([
             'get_start_date' => ['required'],

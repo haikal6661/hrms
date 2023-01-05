@@ -1,6 +1,15 @@
 @extends('backend.layouts.app')
 @section('content')
 
+<style>
+    .datepicker datepicker-dropdown dropdown-menu datepicker-orient-left datepicker-orient-top {
+    top: 100.6562px;
+    left: 293px;
+    z-index: 10;
+    display: block;
+}
+</style>
+
 <div class="content-wrapper">
     <div class="content-header">
         <div class="container-fluid">
@@ -21,6 +30,26 @@
                                 <div class="card-body">
                                 <form id="leave_form">
                                     @csrf
+                                    <div class="row">
+                                        <div class="form-group col-md-4">
+                                            <div class="col-md-12">
+                                            <label for=""><span style="color: red;">*</span>Leave Type :</label>
+                                            <div class="input-group">
+                                                <select class="form-control select2" name="leave_type_id" id="leave_type_id">
+                                                    <option selected="selected" value="">Please select leave type...</option>
+                                                    @foreach ($refleavetype as $leavetype)
+                                                    <option value="{{$leavetype->id}}">{{$leavetype->desc}}</option>
+                                                    @endforeach
+                                                </select>
+                                                <div class="input-group-append">
+                                                    <div class="input-group-text">
+                                                    <span class="fas fa-minus-circle"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
                                     <div class="row">
                                         <div class="form-group col-md-4">
                                             <div class="col-md-12">
@@ -58,26 +87,6 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="form-group col-md-4">
-                                            <div class="col-md-12">
-                                            <label for=""><span style="color: red;">*</span>Leave Type :</label>
-                                            <div class="input-group">
-                                                <select class="form-control select2" name="leave_type_id" id="leave_type_id">
-                                                    <option selected="selected" value="">Please select leave type...</option>
-                                                    @foreach ($refleavetype as $leavetype)
-                                                    <option value="{{$leavetype->id}}">{{$leavetype->desc}}</option>
-                                                    @endforeach
-                                                </select>
-                                                <div class="input-group-append">
-                                                    <div class="input-group-text">
-                                                    <span class="fas fa-minus-circle"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    </div>
-                                    <div class="row">
                                         <div class="form-group col-md-5">
                                             <div class="col-md-12">
                                             <label for="">Reason :</label>
@@ -101,38 +110,12 @@
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="form-group col-md-5">
-                                            <label for="start_date">Annual Leave :</label>
-                                            <input type="text" class="form-control" name="annual_leave" value="{{$detail->hasLeaveBalance->annual_leave}}" disabled>
+                                            <label for="">Annual Leave :</label>
+                                            <input type="text" class="form-control" id="annual_leave" value="" disabled>
                                         </div>
                                         <div class="form-group col-md-5">
-                                            <label for="start_date">Sick Leave :</label>
-                                            <input type="text" class="form-control" name="sick_leave" value="{{$detail->hasLeaveBalance->sick_leave}}" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-5">
-                                            <label for="start_date">Paternity Leave :</label>
-                                            <input type="text" class="form-control" name="paternity_leave" value="{{$detail->hasLeaveBalance->paternity_leave}}" disabled>
-                                        </div>
-                                        <div class="form-group col-md-5">
-                                            <label for="start_date">Maternity Leave :</label>
-                                            <input type="text" class="form-control" name="maternity_leave" value="{{$detail->hasLeaveBalance->maternity_leave}}" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-5">
-                                            <label for="start_date">Marriage Leave :</label>
-                                            <input type="text" class="form-control" name="marriage_leave" value="{{$detail->hasLeaveBalance->marriage_leave}}" disabled>
-                                        </div>
-                                        <div class="form-group col-md-5">
-                                            <label for="start_date">Compassionate Leave :</label>
-                                            <input type="text" class="form-control" name="compassionate_leave" value="{{$detail->hasLeaveBalance->compassionate_leave}}" disabled>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="form-group col-md-5">
-                                            <label for="start_date">Unpaid Leave :</label>
-                                            <input type="text" class="form-control" name="unpaid_leave" value="{{$detail->hasLeaveBalance->unpaid_leave}}" disabled>
+                                            <label for="">Sick Leave :</label>
+                                            <input type="text" class="form-control" id="sick_leave" value="" disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -210,6 +193,7 @@ function submitLeave(id){
                 toastr.error('Something went wrong');
 
                 var errors = response.responseJSON.errors;
+                console.log(response.responseJSON);
 
                 $.each(errors, function(key, value) {
                     if($('[name="'+key+'"]').attr('type') == 'radio' || $('[name="'+key+'"]').attr('type') == 'checkbox'){
@@ -234,6 +218,7 @@ $('#start_date').datepicker({
         autoclose: true,
         todayHighlight: 1,
         format: 'dd/mm/yyyy',
+        orientation: "bottom",
         // startDate: new Date(),
         // endDate: new Date(),
         }).on('change', function(ev){
@@ -248,6 +233,7 @@ $('#end_date').datepicker({
     autoclose: true,
     todayHighlight: 1,
     format: 'dd/mm/yyyy',
+    orientation: "bottom",
     // startDate: new Date(),
     // endDate: new Date(),
     }).on('change', function(ev){
@@ -270,6 +256,23 @@ function showDays(){
     var diffTime = Math.abs(end - start);
     var days = Math.ceil(diffTime/(1000*60*60*24));
     $('#no_of_days').val(days+1);
+    
+}
+
+$('#leave_type_id').on('change', function(ev){
+    let leave_type_id = $('#leave_type_id').val();
+    calcBalance(leave_type_id);
+})
+
+function calcBalance(id){
+    let annual = $('#annual_leave').val();
+    let sick = $('#sick_leave').val();
+    let paternity = $('#paternity_leave').val();
+    let maternity = $('#maternity_leave').val();
+    let marriage = $('#marriage_leave').val();
+    let compassionate = $('#compassionate_leave').val();
+    let unpaid = $('#unpaid_leave').val();
+
     
 }
 
