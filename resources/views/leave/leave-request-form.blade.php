@@ -108,16 +108,27 @@
                                     <h3 class="card-title col-md-11">Leave Balance</h3>
                                 </div>
                                 <div class="card-body">
+                                    @forelse($entitlement->chunk(2) as $chunk)
                                     <div class="row">
-                                        <div class="form-group col-md-5">
-                                            <label for="">Annual Leave :</label>
-                                            <input type="text" class="form-control" id="annual_leave" value="" disabled>
+                                        @foreach($chunk as $leave)
+                                        <div class="form-group col-md-6">
+                                            <label for="">{{$leave->hasLeaveName->desc}} :</label>
+                                            <input type="text" class="form-control" name="leave[{{$leave->leave_type_id}}]" id="{{$leave->id}}" value="{{$leave->balance ?? '0'}}" disabled>
                                         </div>
-                                        <div class="form-group col-md-5">
-                                            <label for="">Sick Leave :</label>
-                                            <input type="text" class="form-control" id="sick_leave" value="" disabled>
-                                        </div>
+                                        @endforeach
                                     </div>
+                                    @empty
+                                        @foreach($refleavetype->chunk(2) as $chunk)
+                                        <div class="row">
+                                            @foreach($chunk as $leave)
+                                            <div class="form-group col-md-6">
+                                                <label for="">{{$leave->desc}} :</label>
+                                                <input type="text" class="form-control" id="annual_leave" value="Not Entitled" disabled>
+                                            </div>
+                                            @endforeach
+                                        </div>
+                                        @endforeach
+                                    @endforelse
                                 </div>
                                 </div>
                             </div>

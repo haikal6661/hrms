@@ -16,10 +16,9 @@ class LeaveDAO extends Controller
 
         $staff_id = $request->staff_id;
         $staff = Staff::find($staff_id);
-        $entitlement = StaffLeave::where('staff_id', $staff_id);
+        $entitlement = StaffLeave::where('staff_id', $staff_id)->first();
         
-        if($staff->hasLeave == null){
-
+        if($entitlement == null){
             foreach($request->leave as $key => $detail){
             
                 $data = [
@@ -32,7 +31,6 @@ class LeaveDAO extends Controller
     
             }
         }else{
-            
             foreach($request->leave as $key => $detail){
 
                 // StaffLeave::update([

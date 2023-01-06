@@ -91,12 +91,14 @@ Route::group(['prefix' => 'leave', 'as' => 'leave', 'middleware' => 'auth'], fun
         $detail = [];
 
         $detail = Auth::user()->hasStaff;
-
+        $staff_id = $detail->id;
+        $entitlement = StaffLeave::where('staff_id', $staff_id)->get();
         $refleavetype = RefLeaveType::all();
 
         return view('leave.leave-request-form', [
             'refleavetype' => $refleavetype,
             'detail' => $detail,
+            'entitlement' => $entitlement,
         ]);
 
     })->name('.leave-request-form');

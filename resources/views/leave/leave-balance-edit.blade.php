@@ -16,24 +16,49 @@
                 <div class="col-md-12">
                 <div class="card">
                     <div style="display: inline-flex;" class="card-header">
-                    <h3 class="card-title col-md-11">Edit Staff Entitlement</h3>
+                    <h3 class="card-title col-md-11">Edit Staff Balance</h3>
                     <!-- <button type="button" class="btn btn-success btn-block btn-sm" title="Register new staff" data-toggle="modal" data-target="#registerModal">
                         <i class="fa fa-plus"></i> Staff</button> -->
                 </div>
                 <div class="card-body">
+                <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group row" style="margin-bottom: 0px;">
+                                <label for="">&ensp;&nbsp; Name :</label>
+                                <p>&nbsp; {{$detail->fullname}}</p>
+                            </div>
+                            <div class="form-group row" style="margin-bottom: 0px;">
+                                <label for="">&ensp;&nbsp; Email :</label>
+                                <p>&nbsp; {{$detail->email}}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group row" style="margin-bottom: 0px;">
+                                <label for="">&ensp;&nbsp; Position :</label>
+                                <p>&nbsp; {{$detail->hasPosition->desc}}</p>
+                            </div>
+                            <div class="form-group row" style="margin-bottom: 0px;">
+                                <label for="">&ensp;&nbsp; Department :</label>
+                                <p>&nbsp; {{$detail->hasDepartment->desc}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
                 <form id="leave_balance">
                     @csrf
                 <input type="hidden" id="staff_id" name="staff_id" value="{{$detail->id}}">
-                @forelse($balance as $leave)
+                @forelse($balance->chunk(3) as $chunk)
                 <div class="row">
-                <div class="form-group col-md-4">
-                    <div class="col-md-6">
-                        <label for="">{{$leave->hasLeaveName->desc}} :</label>
-                        <div class="input-group">
-                            <input class="form-control" type="text" name="leave[{{$leave->leave_type_id}}]" id="{{$leave->id}}" value="{{$leave->balance}}">
+                    @foreach($chunk as $leave)
+                    <div class="form-group col-md-4">
+                        <div class="col-md-6">
+                            <label for="">{{$leave->hasLeaveName->desc}} :</label>
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="leave[{{$leave->leave_type_id}}]" id="{{$leave->id}}" value="{{$leave->balance}}">
+                            </div>
                         </div>
                     </div>
-                </div>
+                    @endforeach
                 </div>
                 @empty
                 @foreach($refleavetype as $leave)

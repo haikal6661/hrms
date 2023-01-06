@@ -21,31 +21,58 @@
                         <i class="fa fa-plus"></i> Staff</button> -->
                 </div>
                 <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group row" style="margin-bottom: 0px;">
+                                <label for="">&ensp;&nbsp; Name :</label>
+                                <p>&nbsp; {{$detail->fullname}}</p>
+                            </div>
+                            <div class="form-group row" style="margin-bottom: 0px;">
+                                <label for="">&ensp;&nbsp; Email :</label>
+                                <p>&nbsp; {{$detail->email}}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group row" style="margin-bottom: 0px;">
+                                <label for="">&ensp;&nbsp; Position :</label>
+                                <p>&nbsp; {{$detail->hasPosition->desc}}</p>
+                            </div>
+                            <div class="form-group row" style="margin-bottom: 0px;">
+                                <label for="">&ensp;&nbsp; Department :</label>
+                                <p>&nbsp; {{$detail->hasDepartment->desc}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
                 <form id="leave_entitlement">
                     @csrf
                 <input type="hidden" id="staff_id" name="staff_id" value="{{$detail->id}}">
-                @forelse($entitlement as $leave)
+                @forelse($entitlement->chunk(3) as $chunk)
                 <div class="row">
-                <div class="form-group col-md-4">
-                    <div class="col-md-6">
-                        <label for="">{{$leave->hasLeaveName->desc}} :</label>
-                        <div class="input-group">
-                            <input class="form-control" type="text" name="leave[{{$leave->leave_type_id}}]" id="{{$leave->id}}" value="{{$leave->entitlement}}">
+                    @foreach($chunk as $leave)
+                    <div class="form-group col-md-4">
+                        <div class="col-md-6">
+                            <label for="">{{$leave->hasLeaveName->desc}} :</label>
+                            <div class="input-group">
+                                <input class="form-control" type="text" name="leave[{{$leave->leave_type_id}}]" id="{{$leave->id}}" value="{{$leave->entitlement}}">
+                            </div>
                         </div>
                     </div>
-                </div>
+                    @endforeach
                 </div>
                 @empty
-                @foreach($refleavetype as $leave)
+                @foreach($refleavetype->chunk(3) as $chunk)
                 <div class="row">
+                @foreach($chunk as $leave)
                 <div class="form-group col-md-4">
                     <div class="col-md-6">
                         <label for="">{{$leave->desc}} :</label>
                         <div class="input-group">
-                            <input class="form-control" type="text" name="leave[{{$leave->leave_type_id}}]" id="{{$leave->id}}" value="">
+                            <input class="form-control" type="text" name="leave[{{$leave->id}}]" id="{{$leave->id}}" value="">
                         </div>
                     </div>
                 </div>
+                @endforeach
                 </div>
                 @endforeach
                 @endforelse

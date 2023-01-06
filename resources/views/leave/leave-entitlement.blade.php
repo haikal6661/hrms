@@ -48,7 +48,7 @@
                                     <!-- @foreach($refleavetype as $leave)
                                     &nbsp;{{$leave->desc}} = 
                                         @foreach ($staff->hasLeave as $entitlement)
-                                            {{$entitlement->entitlement}}
+                                            {{$entitlement->entitlement ?? '0'}}
                                         @endforeach
                                     @endforeach -->
                                     </div>
