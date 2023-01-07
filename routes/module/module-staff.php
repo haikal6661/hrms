@@ -6,6 +6,7 @@ use App\Http\Controllers\Staff\StaffDAO;
 use App\Models\RefDepartment;
 use App\Models\RefPosition;
 use App\Models\Staff;
+use Illuminate\Support\Facades\Auth;
 
 Route::group(['prefix' => 'staff', 'as' => 'staff', 'middleware' => 'auth'], function(){
 
@@ -49,6 +50,23 @@ Route::group(['prefix' => 'staff', 'as' => 'staff', 'middleware' => 'auth'], fun
         ]);
 
     })->name('.staff-edit');
+
+    //view staff profile
+    Route::get('/staff-profile', function(Request $request){
+
+        $staff = Auth::user()->hasStaff;
+        $refposition = RefPosition::all();
+        $refdepartment = RefDepartment::all();
+        $refsupervisor = Staff::where('is_supervisor','!=', null)->get();
+
+        return view('staff.staff-profile', [
+            'staff' => $staff,
+            'refposition' => $refposition,
+            'refdepartment' => $refdepartment,
+            'refsupervisor' => $refsupervisor,
+        ]);
+
+    })->name('.staff-profile');
 
     //update staff
     Route::post('/staff-update', function(Request $request){

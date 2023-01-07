@@ -55,22 +55,38 @@ class StaffDAO extends Controller {
 
         $staff = Staff::find($staff_id);
 
-        $data = [
-            'fullname' => $request->fullname,
-            'email' => $request->email,
-            'ic_no' => $request->ic_no,
-            'address' => $request->address,
-            'phone_no' => $request->phone_no,
-            'position_id' => $request->position_id,
-            'supervisor_id' => $request->supervisor_id,
-            'department_id' => $request->department_id,
-        ];
+        if($request->result == "profile"){
+            $data = [
+                'ic_no' => $request->ic_no,
+                'address' => $request->address,
+                'phone_no' => $request->phone_no,
+            ];
+        }else{
+
+            $data = [
+                'fullname' => $request->fullname,
+                'email' => $request->email,
+                'ic_no' => $request->ic_no,
+                'address' => $request->address,
+                'phone_no' => $request->phone_no,
+                'position_id' => $request->position_id,
+                'supervisor_id' => $request->supervisor_id,
+                'department_id' => $request->department_id,
+            ];
+
+        }
 
         $staff->update($data);
 
+        if($request->result == "profile"){
+            $message = 'Profile Updated Successfully.';
+        }else{
+            $message = 'Staff Updated Succsessfully.';
+        }
+
         if($staff->update($data)){
             return $respones = [
-                'message' => "Staff updated successfully.",
+                'message' => $message,
             ];
         }else{
             return $respones = [

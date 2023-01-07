@@ -31,7 +31,7 @@
                                 <form id="leave_form">
                                     @csrf
                                     <div class="row">
-                                        <div class="form-group col-md-4">
+                                        <div class="form-group col-md-6">
                                             <div class="col-md-12">
                                             <label for=""><span style="color: red;">*</span>Leave Type :</label>
                                             <div class="input-group">
@@ -265,29 +265,12 @@ function showDays(){
     end = new Date(end.split('/')[2],end.split('/')[1]-1,end.split('/')[0]);
     
     var diffTime = Math.abs(end - start);
-    var days = Math.ceil(diffTime/(1000*60*60*24));
-    $('#no_of_days').val(days+1);
+    var days = Math.ceil(diffTime/(1000*60*60*24)+1);
+    $('#no_of_days').val(days);
+
+    return days;
     
 }
-
-$('#leave_type_id').on('change', function(ev){
-    let leave_type_id = $('#leave_type_id').val();
-    calcBalance(leave_type_id);
-})
-
-function calcBalance(id){
-    let annual = $('#annual_leave').val();
-    let sick = $('#sick_leave').val();
-    let paternity = $('#paternity_leave').val();
-    let maternity = $('#maternity_leave').val();
-    let marriage = $('#marriage_leave').val();
-    let compassionate = $('#compassionate_leave').val();
-    let unpaid = $('#unpaid_leave').val();
-
-    
-}
-
-
 
 </script>
 

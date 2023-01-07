@@ -123,6 +123,15 @@
             </ul>
           </li>
           <li class="nav-item">
+            <a href="{{route ('staff.staff-profile')}}" class="nav-link">
+              <i class="nav-icon fas fa-user-cog"></i>
+              <p>
+                My Profile
+                <!-- <span class="right badge badge-danger">New</span> -->
+              </p>
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="dropdown-item" href="{{ route('logout') }}"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                 <i class="nav-icon fas fa-sign-out-alt"></i>

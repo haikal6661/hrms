@@ -47,9 +47,7 @@ class LeaveDAO extends Controller
                 $entitlement->update($data);
             }
         }
-
         
-
         $url = route('leave.leave-entitlement');
 
         return $response = [
