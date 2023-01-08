@@ -68,7 +68,13 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
+                <a href="{{route ('leave.leave-application')}}" class="nav-link">
+                  <!-- <i class="far fa-circle nav-icon"></i> -->
+                  <p>Leave Applications</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route ('leave.leave-history')}}" class="nav-link">
                   <!-- <i class="far fa-circle nav-icon"></i> -->
                   <p>Leave History</p>
                 </a>

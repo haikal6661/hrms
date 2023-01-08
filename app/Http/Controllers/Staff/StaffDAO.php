@@ -36,6 +36,7 @@ class StaffDAO extends Controller {
             'position_id' => $request['position_id'],
             'department_id' => $request['department_id'],
             'is_supervisor' => $request['is_supervisor'],
+            'is_active' => 1,
         ];
 
         $url = route('staff.staff-list');

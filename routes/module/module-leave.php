@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Leave\LeaveDAO;
+use App\Models\LeaveApplication;
 use App\Models\RefLeaveType;
 use App\Models\Staff;
 use App\Models\StaffLeave;
@@ -48,6 +49,32 @@ Route::group(['prefix' => 'leave', 'as' => 'leave', 'middleware' => 'auth'], fun
         ]);
 
     })->name('.leave-entitlement');
+
+    //leave history list
+    Route::get('/leave-history', function(Request $request){
+
+        $leave_application = LeaveApplication::all();
+        $refleavetype = RefLeaveType::all();
+        
+        return view('leave.leave-history', [
+            'leave_application' => $leave_application,
+            'refleavetype' => $refleavetype,
+        ]);
+
+    })->name('.leave-history');
+
+    //leave application list
+    Route::get('/leave-application', function(Request $request){
+
+        $leave_application = LeaveApplication::all();
+        $refleavetype = RefLeaveType::all();
+        
+        return view('leave.leave-application', [
+            'leave_application' => $leave_application,
+            'refleavetype' => $refleavetype,
+        ]);
+
+    })->name('.leave-history');
 
     //leave balance edit
     Route::get('/leave-balance-edit', function(Request $request){

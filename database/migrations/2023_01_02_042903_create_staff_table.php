@@ -29,7 +29,9 @@ return new class extends Migration
             $table->unsignedBigInteger('supervisor_id')->nullable();
             $table->foreign('supervisor_id')->references('id')->on('staff');
             $table->string('is_supervisor',2)->nullable();
-            $table->string('status_id',2)->nullable();
+            $table->boolean('is_active',2)->nullable();
+            $table->foreign('status_id')->references('id')->on('ref_status');
+            $table->unsignedBigInteger('status_id')->nullable();
             $table->timestamps();
         });
     }

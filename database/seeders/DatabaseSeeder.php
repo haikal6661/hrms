@@ -20,5 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call(RefPositionSeeder::class);
         $this->call(RefDepartmentSeeder::class);
         $this->call(RefLeaveTypeSeeder::class);
+        $this->call(RefStatusSeeder::class);
     }
 }

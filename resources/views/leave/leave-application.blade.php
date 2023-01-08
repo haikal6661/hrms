@@ -16,7 +16,7 @@
                 <div class="col-md-12">
                 <div class="card">
                     <div style="display: inline-flex;" class="card-header">
-                    <h3 class="card-title col-md-11">List of staff leave balance (Days)</h3>
+                    <h3 class="card-title col-md-11">List of staff leave application</h3>
                     <!-- <button type="button" class="btn btn-success btn-block btn-sm" title="Register new staff" data-toggle="modal" data-target="#registerModal">
                         <i class="fa fa-plus"></i> Staff</button> -->
                 </div>
@@ -26,16 +26,25 @@
                             <tr>
                                 <th style="width: 10px">No.</th>
                                 <th>Name</th>
-                                <th>Leaves</th>
+                                <th>Leave Type</th>
+                                <th>Date (From)</th>
+                                <th>Date (To)</th>
+                                <th>No of Days</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($staffList as $staff)
+                            @foreach($leave_application as $application)
                             <tr>
                                 <td>{{$loop->index+1}}</td>
-                                <td>{{$staff->fullname}}</td>
-                                <td>
+                                <td>{{$application->hasStaff->fullname}}</td>
+                                <td>{{$application->hasLeaveName->desc}}</td>
+                                <td>{{Carbon\Carbon::parse($application->start_date)->format('d/m/Y')}}</td>
+                                <td>{{Carbon\Carbon::parse($application->end_date)->format('d/m/Y')}}</td>
+                                <td>{{$application->no_of_days}}</td>
+                                <td>{{$application->hasStatus->desc}}</td>
+                                {{-- <td>
                                     <div class="col">
                                     @for($i=0; $i < count($refleavetype); $i++)
                                         &nbsp;{{$refleavetype[$i]->desc}} = 
@@ -45,18 +54,12 @@
                                             @endif
                                         @endforeach
                                     @endfor
-                                    <!-- @foreach($refleavetype as $leave)
-                                    &nbsp;{{$leave->desc}} = 
-                                        @foreach ($staff->hasLeave as $balance)
-                                            {{$balance->balance ?? '0'}}
-                                        @endforeach
-                                    @endforeach -->
                                     </div>
-                                </td>
+                                </td> --}}
                                 <td>
                                 <div class="row">
                                         <div class="col-4">
-                                            <a href="{{route('leave.leave-balance-edit', ['id' => $staff->id])}}" role="button" class="btn btn-success btn-sm" title="Edit Balance"><i class="fa fa-edit"></i></a>
+                                            <a href="{{route('leave.leave-balance-edit', ['id' => $application->id])}}" role="button" class="btn btn-success btn-sm" title="Edit Balance"><i class="fa fa-edit"></i></a>
                                         </div>
                                     </div>
                                 </td>
@@ -65,46 +68,6 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="modal fade" id="leaveEntitlementModal" tabindex="-1" aria-labelledby="leaveEntitlementModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="leaveEntitlementModalLabel">Leave Entitlement</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </div>
-                <div class="modal-body">
-                <div class="card-body">
-                <p class="login-box-msg"></p>
-                
-                <form id="leave_entitlement">
-                    @csrf
-                    <input type="hidden" id="staff_id" name="staff_id" value="">
-                    @foreach($refleavetype as $leave)
-                    <div class="form-group row">
-                        <label for="" class="col-sm-6 col-form-label">{{$leave->desc}} :</label>
-                        <div class="col-sm-4">
-                        @foreach ($staffList as $key => $staff)
-                            @foreach ($staff->hasLeave as $entitlement)
-                            @if($leave->id == $entitlement->id)
-                            <input type="text" class="form-control" name="leave[{{$leave->id}}]" id="{{$leave->id}}" value="{{$entitlement->entitlement}}"
-                            oninput="this.value = this.value.replace(/[^0-9.]/g, '');">
-                            @endif
-                            @endforeach
-                        @endforeach
-                        </div>
-                    </div>
-                    @endforeach
-                </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-                </form>
-                </div>
-            </div>
-            </div>
                 </div>
                 </div>
             </div>

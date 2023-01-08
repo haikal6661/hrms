@@ -22,6 +22,7 @@ class Staff extends Model
         'department_id',
         'supervisor_id',
         'is_supervisor',
+        'is_active',
         'status_id',
     ];
 
@@ -44,5 +45,9 @@ class Staff extends Model
 
     public function hasLeave(){
         return $this->hasMany(StaffLeave::class);
+    }
+
+    public function hasLeaveApplication(){
+        return $this->hasMany(LeaveApplication::class);
     }
 }

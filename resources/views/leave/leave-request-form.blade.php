@@ -195,12 +195,18 @@ function submitLeave(id){
             processData: false,
             method: 'POST',
             success: function(response) {
-                toastr.success(response['message']);
+                console.log(response.flag);
+                if(response.flag == 1){
+                    toastr.warning(response['message']);
+                }else{
+                    toastr.success(response['message']);
+                }
                 // $('#response').html('<span class="text-success">'+response.message+'</span>').fadeIn(500).fadeOut(5000);
                 // window.location = response['url'];
                 // parent.stopLoading();
             },
             error: function(response) {
+                console.log(321);
                 toastr.error('Something went wrong');
 
                 var errors = response.responseJSON.errors;

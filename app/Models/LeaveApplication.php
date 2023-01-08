@@ -20,4 +20,16 @@ class LeaveApplication extends Model
         'reason',
         'status_id',
     ];
+
+    public function hasStaff(){
+        return $this->belongsTo(Staff::class, 'staff_id');
+    }
+
+    public function hasLeaveName(){
+        return $this->belongsTo(RefLeaveType::class, 'leave_type_id');
+    }
+
+    public function hasStatus(){
+        return $this->belongsTo(RefStatus::class, 'status_id');
+    }
 }
