@@ -3,11 +3,19 @@
 namespace App\Http\Controllers\Leave;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Staff\StaffDAO;
+use App\Mail\LeaveRequest;
+use App\Mail\NewUserRegistered;
 use App\Models\LeaveApplication;
 use App\Models\RefLeaveType;
 use App\Models\Staff;
 use App\Models\StaffLeave;
+use App\Models\User;
+use Notification;
+use App\Notifications\SendEmailNewUser;
+use App\Notifications\SendLeaveRequest;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use PhpParser\Node\Stmt\Switch_;
 
 class LeaveDAO extends Controller
@@ -114,18 +122,19 @@ class LeaveDAO extends Controller
         $staff = Staff::find($staff_id);
         $supervisor = $staff->supervisor_id;
 
+        $request->validate([
+            'get_start_date' => ['required'],
+            'get_end_date' => ['required'],
+            'leave_type_id' => ['required'],
+        ],[
+            'get_start_date.required' => 'Please fill in start date.',
+            'get_end_date.required' => 'Please fill in end date.',
+            'leave_type_id.required' => 'Please choose leave type.',
+        ]);
+
         $balance = $this->checkBalance($request);
 
         if($balance == true){
-            $request->validate([
-                'get_start_date' => ['required'],
-                'get_end_date' => ['required'],
-                'leave_type_id' => ['required'],
-            ],[
-                'get_start_date.required' => 'Please fill in start date.',
-                'get_end_date.required' => 'Please fill in end date.',
-                'leave_type_id.required' => 'Please choose leave type.',
-            ]);
     
             $data = [
                 'staff_id' => $staff_id,
@@ -134,10 +143,11 @@ class LeaveDAO extends Controller
                 'no_of_days' => $request->no_of_days,
                 'leave_type_id' => $request->leave_type_id,
                 'reason' => $request->reason,
-                'status_id' => 1,
+                'status_id' => 5,
             ];
     
             $leaveApplication = LeaveApplication::create($data);
+            $this->sendEmail($supervisor);
     
             $url = route('leave.leave-balance');
     
@@ -174,6 +184,10 @@ class LeaveDAO extends Controller
         $staff = StaffLeave::where('staff_id', $staff_id)
                     ->where('leave_type_id', $leave_id)->first();
 
+        if($staff == null){
+            return false;
+        }
+
         $staff_balance = $staff->balance;
 
         if($staff_balance >= $days){
@@ -182,5 +196,22 @@ class LeaveDAO extends Controller
             return false;
         }
 
+    }
+
+    public function sendEmail($information){
+        
+        $supervisor = User::whereHas('hasStaff', function ($q) use ($information){
+                    $q->where('id', $information);
+        })->first();
+
+
+        $details = [
+            'subject' => 'Registration New User',
+            'title' => 'Registration New User'.Carbon::now()->format('d/m/Y'),
+            'body' => 'Welcome To Fiscal Digest HRMS',
+        ];
+
+        Mail::to($supervisor->email)->send(new LeaveRequest($details));
+        // return (new NewUserRegistered($details))->render();
     }
 }

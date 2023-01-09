@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Staff;
 use App\Http\Controllers\Controller;
 use App\Models\Staff;
 use App\Models\User;
+use Notification;
+use App\Notifications\SendEmailNewUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -96,6 +98,18 @@ class StaffDAO extends Controller {
         }
 
         
+    }
+
+    public function sendEmail(){
+        $email = User::find(2);
+
+        $details = [
+            'greeting' => 'Hye Im from the future',
+            'body' => 'Welcome to hell',
+        ];
+
+        Notification::send($email, new SendEmailNewUser($details));
+        dd('done');
     }
 }
 

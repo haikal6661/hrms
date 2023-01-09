@@ -43,7 +43,13 @@
                                 <td>{{Carbon\Carbon::parse($application->start_date)->format('d/m/Y')}}</td>
                                 <td>{{Carbon\Carbon::parse($application->end_date)->format('d/m/Y')}}</td>
                                 <td>{{$application->no_of_days}}</td>
-                                <td>{{$application->hasStatus->desc}}</td>
+                                @if($application->status_id == '6')
+                                <td><span style="font-size: 90%;" class="right badge badge-success">{{$application->hasStatus->desc}}</span></td>
+                                @elseif($application->status_id == '5')
+                                <td><span style="font-size: 90%;" class="right badge badge-info">{{$application->hasStatus->desc}}</span></td>
+                                @else
+                                <td><span style="font-size: 90%;" class="right badge badge-danger">{{$application->hasStatus->desc}}</span></td>
+                                @endif
                                 {{-- <td>
                                     <div class="col">
                                     @for($i=0; $i < count($refleavetype); $i++)

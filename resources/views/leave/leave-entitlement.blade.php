@@ -36,21 +36,23 @@
                                 <td>{{$loop->index+1}}</td>
                                 <td>{{$staff->fullname}}</td>
                                 <td>
-                                    <div class="col">
-                                    @for($i=0; $i < count($refleavetype); $i++)
-                                        &nbsp;{{$refleavetype[$i]->desc}} = 
-                                        @foreach ($staff->hasLeave as $entitlement)
-                                            @if($entitlement->leave_type_id == $refleavetype[$i]->id)
-                                            {{$entitlement->entitlement ?? '0'}}
-                                            @endif
+                                    <div class="row">
+                                    @php
+                                        $refleavetypes = $refleavetype->chunk(3);
+                                    @endphp
+                                    @for($i=0; $i < count($refleavetypes); $i++)
+                                        <div class="col">
+                                        @foreach($refleavetypes[$i] as $leavetype)
+                                            <li>{{$leavetype->desc}} = 
+                                            @foreach ($staff->hasLeave as $entitlement)
+                                                @if($entitlement->leave_type_id == $leavetype->id)
+                                                    {{$entitlement->entitlement ?? '0'}}
+                                                @endif
+                                            @endforeach
+                                            </li>
                                         @endforeach
+                                        </div>
                                     @endfor
-                                    <!-- @foreach($refleavetype as $leave)
-                                    &nbsp;{{$leave->desc}} = 
-                                        @foreach ($staff->hasLeave as $entitlement)
-                                            {{$entitlement->entitlement ?? '0'}}
-                                        @endforeach
-                                    @endforeach -->
                                     </div>
                                 </td>
                                 <td>

@@ -47,6 +47,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="hasErr"></div>
                                         </div>
                                     </div>
                                     </div>
@@ -206,7 +207,6 @@ function submitLeave(id){
                 // parent.stopLoading();
             },
             error: function(response) {
-                console.log(321);
                 toastr.error('Something went wrong');
 
                 var errors = response.responseJSON.errors;

@@ -74,7 +74,7 @@ Route::group(['prefix' => 'leave', 'as' => 'leave', 'middleware' => 'auth'], fun
             'refleavetype' => $refleavetype,
         ]);
 
-    })->name('.leave-history');
+    })->name('.leave-application');
 
     //leave balance edit
     Route::get('/leave-balance-edit', function(Request $request){
