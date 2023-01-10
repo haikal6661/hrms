@@ -41,11 +41,6 @@ class LeaveDAO extends Controller
         }else{
             foreach($request->leave as $key => $detail){
 
-                // StaffLeave::update([
-                //     'staff_id' => $staff_id,
-                //     'leave_type_id' => $key,
-                //     'entitlement' => $detail,
-                // ]);
             $entitlement = StaffLeave::where('staff_id', $staff_id)->where('leave_type_id', $key);
 
                 $data = [
@@ -88,12 +83,6 @@ class LeaveDAO extends Controller
             
             foreach($request->leave as $key => $detail){
 
-                // StaffLeave::UpdateOrCreate([
-                //     'staff_id' => $staff_id,
-                //     'leave_type_id' => $key,
-                // ],[
-                //     'balance' => $detail,
-                // ]);
             $balance = StaffLeave::where('staff_id', $staff_id)->where('leave_type_id', $key);
 
                 $data = [
@@ -147,7 +136,7 @@ class LeaveDAO extends Controller
             ];
     
             $leaveApplication = LeaveApplication::create($data);
-            $this->sendEmail($supervisor);
+            $this->sendEmail($supervisor,$leaveApplication);
     
             $url = route('leave.leave-balance');
     
@@ -198,7 +187,7 @@ class LeaveDAO extends Controller
 
     }
 
-    public function sendEmail($information){
+    public function sendEmail($information,$leaveApplication){
         
         $supervisor = User::whereHas('hasStaff', function ($q) use ($information){
                     $q->where('id', $information);
@@ -206,12 +195,29 @@ class LeaveDAO extends Controller
 
 
         $details = [
-            'subject' => 'Registration New User',
-            'title' => 'Registration New User'.Carbon::now()->format('d/m/Y'),
-            'body' => 'Welcome To Fiscal Digest HRMS',
+            'subject' => 'Leave Request',
+            'title' => 'Leave Request '.Carbon::now()->format('d/m/Y'),
+            'name' => $leaveApplication->hasStaff->fullname,
+            'leave_type' => $leaveApplication->hasLeaveName->desc,
+            'start_date' => $leaveApplication->start_date,
+            'end_date' => $leaveApplication->end_date,
+            'no_of_days' => $leaveApplication->no_of_days,
         ];
 
         Mail::to($supervisor->email)->send(new LeaveRequest($details));
-        // return (new NewUserRegistered($details))->render();
     }
+
+    // public function sendEmail(){
+    //     $details = [
+    //         'subject' => 'Testing email',
+    //         'title' => 'Registration New User '.Carbon::now()->format('d/m/Y'),
+    //         'name' => 'Haikal',
+    //         'leave_type' => 'Annual Leave',
+    //         'date_start' => '10/1/2023',
+    //         'date_end' => '12/1/2023',
+    //         'no_of_days' => '2',
+    //     ];
+
+    //     return (new NewUserRegistered($details))->render();
+    // }
 }

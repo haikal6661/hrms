@@ -23,7 +23,7 @@
 
   <!-- Preloader -->
   <div class="preloader flex-column justify-content-center align-items-center">
-    <img class="animation__wobble" src="{{asset('backend/dist/img/AdminLTELogo.pn')}}g" alt="AdminLTELogo" height="60" width="60">
+    <img class="animation__wobble" src="{{asset('logo_fd.jpg')}}" alt="FDLogo" height="100" width="60">
   </div>
 
   <!-- Navbar -->

@@ -45,7 +45,7 @@ class NewUserRegistered extends Mailable
     public function content()
     {
         return new Content(
-            view: 'emails.leave.leave-request',
+            view: 'emails.staff.new-user',
         );
     }
 

@@ -21,7 +21,7 @@ Route::group(['prefix' => 'staff', 'as' => 'staff', 'middleware' => 'auth'], fun
 
         $refposition = RefPosition::all();
         $refdepartment = RefDepartment::all();
-        $stafflist = Staff::all();
+        $stafflist = Staff::paginate(10);
 
         return view('staff.staff-list', [
             'refposition' => $refposition,

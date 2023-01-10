@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\Staff;
 use App\Http\Controllers\Controller;
+use App\Mail\NewUserRegistered;
 use App\Models\Staff;
 use App\Models\User;
 use Notification;
 use App\Notifications\SendEmailNewUser;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class StaffDAO extends Controller {
     //store staff
@@ -29,6 +32,7 @@ class StaffDAO extends Controller {
         ];
 
         $user = User::create($user_data);
+        $this->sendEmail($user,$request);
         $user_id = $user->id;
 
         $staff_data = [
@@ -100,16 +104,18 @@ class StaffDAO extends Controller {
         
     }
 
-    public function sendEmail(){
-        $email = User::find(2);
+    public function sendEmail($information,$request){
+
+        $password = $request->password;
 
         $details = [
-            'greeting' => 'Hye Im from the future',
-            'body' => 'Welcome to hell',
+            'subject' => 'Registration New User',
+            'title' => 'Registration New User '.Carbon::now()->format('d/m/Y'),
+            'username' => $information->email,
+            'password' => $password,
         ];
 
-        Notification::send($email, new SendEmailNewUser($details));
-        dd('done');
+        Mail::to($information)->send(new NewUserRegistered($details));
     }
 }
 

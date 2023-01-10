@@ -234,7 +234,7 @@ $(document).ready(function(){
 $('#start_date').datepicker({
         autoclose: true,
         todayHighlight: 1,
-        format: 'dd/mm/yyyy',
+        format: 'dd-mm-yyyy',
         orientation: "bottom",
         // startDate: new Date(),
         // endDate: new Date(),
@@ -249,7 +249,7 @@ $('#start_date').datepicker({
 $('#end_date').datepicker({
     autoclose: true,
     todayHighlight: 1,
-    format: 'dd/mm/yyyy',
+    format: 'dd-mm-yyyy',
     orientation: "bottom",
     // startDate: new Date(),
     // endDate: new Date(),
@@ -267,8 +267,8 @@ function showDays(){
     var start = $('#get_start_date').val();
     var end = $('#get_end_date').val();
     if(!start || !end) return;
-    start = new Date(start.split('/')[2],start.split('/')[1]-1,start.split('/')[0]);
-    end = new Date(end.split('/')[2],end.split('/')[1]-1,end.split('/')[0]);
+    start = new Date(start.split('-')[2],start.split('-')[1]-1,start.split('-')[0]);
+    end = new Date(end.split('-')[2],end.split('-')[1]-1,end.split('-')[0]);
     
     var diffTime = Math.abs(end - start);
     var days = Math.ceil(diffTime/(1000*60*60*24)+1);

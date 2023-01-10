@@ -62,21 +62,30 @@
                             <td align="left" style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative;">
                                 <table width="100%" border="0" cellpadding="0" cellspacing="0" role="presentation" style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';">
                                 <tr>
-                                    <p>Leave requests from employees have been sent to you. Action is required.</p>
+                                    <p>Your account has been created. You can now log in to HRMS using the button below.</p>
                                     <p>Details as below :-</p><br>
-                                    <p>Name : {{$details['name']}}</p>
-                                    <p>Leave Type : {{$details['leave_type']}}</p>
-                                    <p>Date(From) : {{Carbon\Carbon::parse($details['start_date'])->format('d/m/Y')}}</p>
-                                    <p>Date(To) : {{Carbon\Carbon::parse($details['end_date'])->format('d/m/Y')}}</p>
-                                    <p>No of days : {{$details['no_of_days']}}</p>
+                                    <p>Username : {{$details['username']}}</p>
+                                    <p>Password : {{$details['password']}}</p><br>
+                                    <p>Please change the password after you log in.</p>
+                                    <br>
                                 </tr>
                                 <tr>
                                 <td align="center" style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative;">
                                     <table border="0" cellpadding="0" cellspacing="0" role="presentation" style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative;">
                                         <tr>
-                                            <td style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative;">
+                                            <td align="center" style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative;">
                                                 <a href="http://hrms.test" class="button button-primary" target="_blank" rel="noopener" style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; -webkit-text-size-adjust: none; border-radius: 4px; color: #fff; display: inline-block; overflow: hidden; text-decoration: none; background-color: #2d3748; border-bottom: 8px solid #2d3748; border-left: 18px solid #2d3748; border-right: 18px solid #2d3748; border-top: 8px solid #2d3748;">Click Here</a>
                                             </td>
+                                        </tr>
+                                        <tr>
+                                        <td style="box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative;">
+                                        <br>
+                                        <p style="font-style: italic;">The content of this email is confidential and intended 
+                                        for the recipient specified in message only. It is strictly forbidden to share any part 
+                                        of this message with any third party, without a written consent of the sender. If you 
+                                        received this message by mistake, please contact with admin and follow with its 
+                                        deletion, so that we can ensure such a mistake does not occur in the future.</p>
+                                        </td>
                                         </tr>
                                     </table>
                                 </td>

@@ -53,12 +53,6 @@
                                         @endforeach
                                         </div>
                                     @endfor
-                                    <!-- @foreach($refleavetype as $leave)
-                                    &nbsp;{{$leave->desc}} = 
-                                        @foreach ($staff->hasLeave as $balance)
-                                            {{$balance->balance ?? '0'}}
-                                        @endforeach
-                                    @endforeach -->
                                     </div>
                                 </td>
                                 <td>
@@ -113,6 +107,20 @@
                 </div>
             </div>
             </div>
+            <div class="card-footer clearfix">
+                <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                        <div class="dataTables_info" aria-live="polite">Showing {{$staffList->firstItem()}} to {{$staffList->lastItem()}} of {{$staffList->total()}} entries</div>
+                    </div>
+                    <div class="col-sm-12 col-md-7">
+                        <div class="dataTables_paginate paging_simple_numbers">
+                            <ul class="pagination pagination m-0 float-right">
+                                {{$staffList->links()}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                </div>
                 </div>
                 </div>
             </div>

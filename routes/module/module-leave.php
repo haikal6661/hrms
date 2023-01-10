@@ -26,7 +26,7 @@ Route::group(['prefix' => 'leave', 'as' => 'leave', 'middleware' => 'auth'], fun
     //leave balance list
     Route::get('/leave-balance', function(Request $request){
 
-        $staffList = Staff::all();
+        $staffList = Staff::paginate(10);
         $refleavetype = RefLeaveType::all();
         
         return view('leave.leave-balance', [
@@ -39,7 +39,7 @@ Route::group(['prefix' => 'leave', 'as' => 'leave', 'middleware' => 'auth'], fun
     //leave entitlement list
     Route::get('/leave-entitlement', function(Request $request){
 
-        $staffList = Staff::all();
+        $staffList = Staff::paginate(10);
         $refleavetype = RefLeaveType::all();
 
         
@@ -66,7 +66,7 @@ Route::group(['prefix' => 'leave', 'as' => 'leave', 'middleware' => 'auth'], fun
     //leave application list
     Route::get('/leave-application', function(Request $request){
 
-        $leave_application = LeaveApplication::all();
+        $leave_application = LeaveApplication::paginate(10);
         $refleavetype = RefLeaveType::all();
         
         return view('leave.leave-application', [

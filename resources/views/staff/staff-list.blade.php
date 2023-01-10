@@ -202,15 +202,19 @@
                 </div>
             </div>
             </div>
-
-                <div class="card-footer clearfix">
-                    <ul class="pagination pagination-sm m-0 float-right">
-                        <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
-                    </ul>
+            <div class="card-footer clearfix">
+                <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                        <div class="dataTables_info" aria-live="polite">Showing {{$stafflist->firstItem()}} to {{$stafflist->lastItem()}} of {{$stafflist->total()}} entries</div>
+                    </div>
+                    <div class="col-sm-12 col-md-7">
+                        <div class="dataTables_paginate paging_simple_numbers">
+                            <ul class="pagination pagination m-0 float-right">
+                                {{$stafflist->links()}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
                 </div>
             </div>
         </div>

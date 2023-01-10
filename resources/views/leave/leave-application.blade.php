@@ -74,6 +74,20 @@
                         </tbody>
                     </table>
                 </div>
+                <div class="card-footer clearfix">
+                <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                        <div class="dataTables_info" aria-live="polite">Showing {{$leave_application->firstItem()}} to {{$leave_application->lastItem()}} of {{$leave_application->total()}} entries</div>
+                    </div>
+                    <div class="col-sm-12 col-md-7">
+                        <div class="dataTables_paginate paging_simple_numbers">
+                            <ul class="pagination pagination m-0 float-right">
+                                {{$leave_application->links()}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                </div>
                 </div>
                 </div>
             </div>
