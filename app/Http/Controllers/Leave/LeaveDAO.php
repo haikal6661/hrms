@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Leave;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Staff\StaffDAO;
+use App\Mail\LeaveApproval;
 use App\Mail\LeaveRequest;
 use App\Mail\NewUserRegistered;
 use App\Models\LeaveApplication;
@@ -160,7 +161,57 @@ class LeaveDAO extends Controller
             ];
         }
 
-        
+    }
+
+    public function storeLeaveApproval(Request $request){
+
+        $staff_id = $request->staff_id;
+        $leave_type_id = $request->leave_type_id;
+        $no_of_days = $request->no_of_days;
+
+        $leave_id = $request->leave_id;
+        $staffleave = StaffLeave::where('staff_id', $staff_id)
+                        ->where('leave_type_id', $leave_type_id)->first();
+
+        $leaveApplication = LeaveApplication::find($leave_id);
+
+        $balance = $staffleave->balance;
+        $update_balance = $balance-$no_of_days;
+
+        if($request->approval == 1){
+
+            $data = [
+                'balance' => $update_balance,
+            ];
+    
+            $data2 = [
+                'supervisor_remark' => $request->supervisor_remark,
+                'status_id' => 6,
+            ];
+
+            $staffleave->update($data);
+            $leaveApplication->update($data2);
+
+            $this->sendEmailApproval($request);
+
+        }else{
+
+            $data2 = [
+                'supervisor_remark' => $request->supervisor_remark,
+                'status_id' => 8,
+            ];
+
+            $leaveApplication->update($data2);
+
+            $this->sendEmailApproval($request);
+        }
+
+        $url = route('leave.leave-application');
+
+        return $response = [
+            'message' => "Leave Approval Submitted.",
+            'url' => $url,
+        ];
 
     }
 
@@ -207,17 +258,49 @@ class LeaveDAO extends Controller
         Mail::to($supervisor->email)->send(new LeaveRequest($details));
     }
 
+    public function sendEmailApproval($information){
+        
+        $staff_id = $information->staff_id;
+        $leave_id = $information->leave_id;
+        $staff = Staff::find($staff_id);
+        $leaveApplication = LeaveApplication::find($leave_id);
+        if($information->approval == 1){
+
+            $details = [
+                'subject' => 'Leave Approval',
+                'title' => 'Leave Approval '.Carbon::now()->format('d/m/Y'),
+                'start_date' => $leaveApplication->start_date,
+                'end_date' => $leaveApplication->end_date,
+                'result' => 'approved',
+                // 'remarks' => $information->supervisor_remark,
+            ];
+
+            Mail::to($staff->email)->send(new LeaveApproval($details));
+
+        }else{
+
+            $details = [
+                'subject' => 'Leave Approval',
+                'title' => 'Leave Approval '.Carbon::now()->format('d/m/Y'),
+                'start_date' => $leaveApplication->start_date,
+                'end_date' => $leaveApplication->end_date,
+                'result' => 'rejected',
+                'remarks' => $information->supervisor_remark,
+            ];
+
+            Mail::to($staff->email)->send(new LeaveApproval($details));
+        }
+    }
+
     // public function sendEmail(){
     //     $details = [
-    //         'subject' => 'Testing email',
-    //         'title' => 'Registration New User '.Carbon::now()->format('d/m/Y'),
-    //         'name' => 'Haikal',
-    //         'leave_type' => 'Annual Leave',
-    //         'date_start' => '10/1/2023',
-    //         'date_end' => '12/1/2023',
-    //         'no_of_days' => '2',
+    //         'subject' => 'Leave Approval',
+    //         'title' => 'Leave Approval '.Carbon::now()->format('d/m/Y'),
+    //         'start_date' => '13/1/2023',
+    //         'end_date' => '13/1/2023',
+    //         'result' => 'approved',
     //     ];
 
-    //     return (new NewUserRegistered($details))->render();
+    //     return (new LeaveApproval($details))->render();
     // }
 }

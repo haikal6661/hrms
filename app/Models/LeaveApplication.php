@@ -18,6 +18,7 @@ class LeaveApplication extends Model
         'no_of_days',
         'leave_type_id',
         'reason',
+        'supervisor_remark',
         'status_id',
     ];
 

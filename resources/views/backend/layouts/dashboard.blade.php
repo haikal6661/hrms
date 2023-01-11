@@ -1,6 +1,27 @@
 @extends('backend.layouts.app')
 @section('content')
 
+<style>
+  .fc-view-container {
+    background-color: grey;
+  }
+  .fc-day-header {
+    background-color: steelblue;
+  }
+
+  .fc td.fc-today {
+    background: slategray;
+  }
+
+  .fc-event-container:hover {
+    pointer-events: none;
+  }
+  .col-sm-10 {
+    margin-top: 6px;
+  }
+
+</style>
+
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
@@ -91,11 +112,11 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h5 class="card-title">Monthly Recap Report</h5>
+                <h5 class="card-title">Event Calendar</h5>
 
                 <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
+                  <!-- <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i> -->
                   </button>
                   <!-- <div class="btn-group">
                     <button type="button" class="btn btn-tool dropdown-toggle" data-toggle="dropdown">
@@ -109,18 +130,24 @@
                       <a href="#" class="dropdown-item">Separated link</a>
                     </div>
                   </div> -->
-                  <button type="button" class="btn btn-tool" data-card-widget="remove">
+                  <!-- <button type="button" class="btn btn-tool" data-card-widget="remove">
                     <i class="fas fa-times"></i>
-                  </button>
+                  </button> -->
                 </div>
               </div>
               <!-- /.card-header -->
-              <div class="card-body">
+              <div style="margin-left: 100px; margin-right: 100px;" class="card-body">
+                <div class="form-group row">
+                  <label for="" class="col-sm-2 col-form-label">Leave Legend :</label>
+                  <div class="col-sm-10">
+                    <span>Waiting Approval</span>&emsp;&emsp;
+                    <span>Approved</span>&emsp;&emsp;
+                    <span>Rejected</span>
+                  </div>
+                </div>
                 <div class="row">
                   <div class="col-md-12">
-                    <p class="text-center">
-                      <strong>Sales: 1 Jan, 2014 - 30 Jul, 2014</strong>
-                    </p>
+                    <div id='full_calendar_events'></div>
                   </div>
                 </div>
                 <!-- /.row -->
@@ -141,5 +168,80 @@
     </section>
     <!-- /.content -->
   </div>
+
+  <script>
+    $(document).ready(function () {
+            var SITEURL = "{{ url('/') }}";
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var calendar = $('#full_calendar_events').fullCalendar({
+                editable: false,
+                events: SITEURL + "/calendar-event",
+                displayEventTime: true,
+                height: 800,
+                eventRender: function (event, element, view) {
+                    if (event.allDay === 'true') {
+                        event.allDay = true;
+                    } else {
+                        event.allDay = false;
+                    }
+                },
+                selectable: false,
+                selectHelper: false,
+                select: function (event_start, event_end, allDay) {
+                    var event_name = prompt('Event Name:');
+                    if (event_name) {
+                        var event_start = $.fullCalendar.formatDate(event_start, "Y-MM-DD HH:mm:ss");
+                        var event_end = $.fullCalendar.formatDate(event_end, "Y-MM-DD HH:mm:ss");
+                        $.ajax({
+                            url: SITEURL + "/calendar-crud-ajax",
+                            data: {
+                                event_name: event_name,
+                                event_start: event_start,
+                                event_end: event_end,
+                                type: 'create'
+                            },
+                            type: "POST",
+                            success: function (data) {
+                                displayMessage("Event created.");
+                                calendar.fullCalendar('renderEvent', {
+                                    id: data.id,
+                                    title: event_name,
+                                    start: event_start,
+                                    end: event_end,
+                                    allDay: allDay
+                                }, true);
+                                calendar.fullCalendar('unselect');
+                            }
+                        });
+                    }
+                },
+                eventDrop: function (event, delta) {
+                    var event_start = $.fullCalendar.formatDate(event.start, "Y-MM-DD");
+                    var event_end = $.fullCalendar.formatDate(event.end, "Y-MM-DD");
+                    $.ajax({
+                        url: SITEURL + '/calendar-crud-ajax',
+                        data: {
+                            title: event.event_name,
+                            start: event_start,
+                            end: event_end,
+                            id: event.id,
+                            type: 'edit'
+                        },
+                        type: "POST",
+                        success: function (response) {
+                            displayMessage("Event updated");
+                        }
+                    });
+                },
+            });
+        });
+        function displayMessage(message) {
+            toastr.success(message, 'Event');            
+        }
+  </script>
 
   @endsection

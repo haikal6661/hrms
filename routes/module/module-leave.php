@@ -76,6 +76,20 @@ Route::group(['prefix' => 'leave', 'as' => 'leave', 'middleware' => 'auth'], fun
 
     })->name('.leave-application');
 
+    //leave application action form
+    Route::get('/leave-application-approve', function(Request $request){
+
+        $detail = [];
+
+        $leave_id = $request->id;
+        $detail = LeaveApplication::find($leave_id);
+
+        return view('leave.leave-request-approve', [
+            'detail' => $detail,
+        ]);
+
+    })->name('.leave-request-approve');
+
     //leave balance edit
     Route::get('/leave-balance-edit', function(Request $request){
 
@@ -135,6 +149,12 @@ Route::group(['prefix' => 'leave', 'as' => 'leave', 'middleware' => 'auth'], fun
         $LeaveDAO = new LeaveDAO();
         return $LeaveDAO->storeLeaveApplication($request);
     })->name('.leave-application');
+
+    //store leave approval
+    Route::post('/leave-approval', function(Request $request){
+        $LeaveDAO = new LeaveDAO();
+        return $LeaveDAO->storeLeaveApproval($request);
+    })->name('.leave-approval');
 
 });
 

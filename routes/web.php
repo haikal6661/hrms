@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FullCalendarController;
 use App\Http\Controllers\Leave\LeaveDAO;
 use App\Http\Controllers\Staff\StaffDAO;
 use Illuminate\Support\Facades\Route;
@@ -32,3 +33,4 @@ require __DIR__.'/module/module-leave.php';
 //----------Module Leave routes end----------
 
 Route::get('send', [LeaveDAO::class,"sendEmail"]);
+Route::get('calendar-event', [FullCalendarController::class, 'index']);

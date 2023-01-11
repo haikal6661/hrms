@@ -23,6 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('leave_type_id')->nullable();
             $table->foreign('leave_type_id')->references('id')->on('ref_leave_type');
             $table->string('reason',100)->nullable();
+            $table->string('supervisor_remark',100)->nullable();
             $table->foreign('status_id')->references('id')->on('ref_status');
             $table->unsignedBigInteger('status_id')->nullable();
             $table->timestamps();

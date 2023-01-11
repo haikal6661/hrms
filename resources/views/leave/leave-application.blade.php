@@ -65,7 +65,7 @@
                                 <td>
                                 <div class="row">
                                         <div class="col-4">
-                                            <a href="{{route('leave.leave-balance-edit', ['id' => $application->id])}}" role="button" class="btn btn-success btn-sm" title="Edit Balance"><i class="fa fa-edit"></i></a>
+                                            <a href="{{route('leave.leave-request-approve', ['id' => $application->id])}}" role="button" class="btn btn-success btn-sm" title="Approval"><i class="fa fa-edit"></i></a>
                                         </div>
                                     </div>
                                 </td>
