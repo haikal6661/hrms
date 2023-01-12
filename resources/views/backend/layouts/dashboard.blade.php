@@ -12,12 +12,18 @@
   .fc td.fc-today {
     background: slategray;
   }
-
-  .fc-event-container:hover {
+  .fc-event {
+    border: 1px solid #7c7c7c;
+  }
+  td {
     pointer-events: none;
   }
   .col-sm-10 {
     margin-top: 6px;
+  }
+  .fc-title {
+    padding: 0 1px;
+    white-space: normal;
   }
 
 </style>
@@ -138,11 +144,11 @@
               <!-- /.card-header -->
               <div style="margin-left: 100px; margin-right: 100px;" class="card-body">
                 <div class="form-group row">
-                  <label for="" class="col-sm-2 col-form-label">Leave Legend :</label>
+                  <label for="" style="max-width: 125px;" class="col-sm-2 col-form-label">Leave Legend :</label>
                   <div class="col-sm-10">
-                    <span>Waiting Approval</span>&emsp;&emsp;
-                    <span>Approved</span>&emsp;&emsp;
-                    <span>Rejected</span>
+                    <span class="right badge badge-info">Waiting Approval</span>&emsp;
+                    <span class="right badge badge-success">Approved</span>&emsp;
+                    <span class="right badge badge-danger">Rejected</span>
                   </div>
                 </div>
                 <div class="row">
@@ -183,6 +189,17 @@
                 displayEventTime: true,
                 height: 800,
                 eventRender: function (event, element, view) {
+                  console.log(element[0]);
+                  element.find('.fc-title').append(" - " + event.leave_type);
+                  if(event.status_id == 6){
+                    element.css('background-color', '#21ae00');
+                  }
+                  if(event.status_id == 8){
+                    element.css('background-color', '#dc3545');
+                  }
+                  if(event.status_id == 5){
+                    element.css('background-color', '#17a2b8');
+                  }
                     if (event.allDay === 'true') {
                         event.allDay = true;
                     } else {
@@ -191,52 +208,6 @@
                 },
                 selectable: false,
                 selectHelper: false,
-                select: function (event_start, event_end, allDay) {
-                    var event_name = prompt('Event Name:');
-                    if (event_name) {
-                        var event_start = $.fullCalendar.formatDate(event_start, "Y-MM-DD HH:mm:ss");
-                        var event_end = $.fullCalendar.formatDate(event_end, "Y-MM-DD HH:mm:ss");
-                        $.ajax({
-                            url: SITEURL + "/calendar-crud-ajax",
-                            data: {
-                                event_name: event_name,
-                                event_start: event_start,
-                                event_end: event_end,
-                                type: 'create'
-                            },
-                            type: "POST",
-                            success: function (data) {
-                                displayMessage("Event created.");
-                                calendar.fullCalendar('renderEvent', {
-                                    id: data.id,
-                                    title: event_name,
-                                    start: event_start,
-                                    end: event_end,
-                                    allDay: allDay
-                                }, true);
-                                calendar.fullCalendar('unselect');
-                            }
-                        });
-                    }
-                },
-                eventDrop: function (event, delta) {
-                    var event_start = $.fullCalendar.formatDate(event.start, "Y-MM-DD");
-                    var event_end = $.fullCalendar.formatDate(event.end, "Y-MM-DD");
-                    $.ajax({
-                        url: SITEURL + '/calendar-crud-ajax',
-                        data: {
-                            title: event.event_name,
-                            start: event_start,
-                            end: event_end,
-                            id: event.id,
-                            type: 'edit'
-                        },
-                        type: "POST",
-                        success: function (response) {
-                            displayMessage("Event updated");
-                        }
-                    });
-                },
             });
         });
         function displayMessage(message) {

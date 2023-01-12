@@ -21,8 +21,12 @@ class FullCalendarController extends Controller
                     'title' => $row->hasStaff->fullname,
                     'start' => $row->start_date,
                     'end' => $row->end_date,
+                    'leave_type' => $row->hasLeaveName->desc,
+                    'status_id' => $row->status_id,
                 ];
             }
+
+            // dd($data);
             
             return response()->json(collect($data));
         }

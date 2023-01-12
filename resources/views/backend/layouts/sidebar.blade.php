@@ -12,7 +12,7 @@
         <div class="image">
           <img src="{{asset('backend/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
         </div>
-        <div class="info">
+        <div style="padding: 0 1px 0 5px; white-space: normal;" class="info">
           <a href="#" class="d-block">{{auth()->user()->name}}</a>
         </div>
       </div>
