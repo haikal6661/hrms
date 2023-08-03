@@ -35,6 +35,11 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if(count($leave_application) == 0)
+                            <tr>
+                                <td colspan="8" style="text-align: center;"><p><i class="fas fa-info-circle"></i> No record was found.</p></td>
+                            </tr>
+                            @endif
                             @foreach($leave_application as $application)
                             <tr>
                                 <td>{{$loop->index+1}}</td>

@@ -31,6 +31,11 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if(count($staffList) == 0)
+                            <tr>
+                                <td colspan="4" style="text-align: center;"><p><i class="fas fa-info-circle"></i> No record was found.</p></td>
+                            </tr>
+                            @endif
                             @foreach($staffList as $staff)
                             <tr>
                                 <td>{{$loop->index+1}}</td>

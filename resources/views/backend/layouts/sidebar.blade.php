@@ -89,42 +89,30 @@
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-chart-pie"></i>
+              <i class="nav-icon fas fa-user-cog"></i>
               <p>
-                Charts
+                User Account Control
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/charts/chartjs.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>ChartJS</p>
+                <a href="{{route ('uac.role-list')}}" class="nav-link">
+                  <!-- <i class="far fa-circle nav-icon"></i> -->
+                  <p>Role Management</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="pages/charts/flot.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Flot</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/charts/inline.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Inline</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/charts/uplot.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>uPlot</p>
+                  <!-- <i class="far fa-circle nav-icon"></i> -->
+                  <p>Permission Management</p>
                 </a>
               </li>
             </ul>
           </li>
           <li class="nav-item">
             <a href="{{route ('staff.staff-profile')}}" class="nav-link">
-              <i class="nav-icon fas fa-user-cog"></i>
+              <i class="nav-icon fas fa-user"></i>
               <p>
                 My Profile
                 <!-- <span class="right badge badge-danger">New</span> -->
