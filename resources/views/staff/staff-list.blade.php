@@ -62,7 +62,8 @@
                                             <a href="{{route('staff.staff-edit',['id' => $staff->id])}}" class="btn btn-success btn-sm edit" role="button" title="Edit"><i class="fa fa-user-edit"></i></a>
                                         </div>
                                         <div class="col-4">
-                                            <button type="button" class="btn btn-danger btn-sm delete" title="Delete"><i class="fa fa-trash-alt"></i></button>
+                                            <button type="button" class="btn btn-danger btn-sm remove" title="Remove" 
+                                            data-toggle="modal" data-target="#removeModal" data-id="{{$staff->id}}"><i class="fa fa-trash-alt"></i></button>
                                         </div>
                                     </div>
                                 </td>
@@ -161,8 +162,8 @@
                 </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary">Register</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
                 </form>
                 </div>
@@ -207,6 +208,33 @@
                 </div>
             </div>
             </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="removeModal" tabindex="-1" aria-labelledby="removeModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Confirmation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </div>
+                <div class="modal-body">
+                <div class="card-body">
+                <p class="login-box-msg"></p>
+                <input type="hidden" id="id" value="">
+                @csrf
+                    <p>Are you sure you want to remove this staff?</p>
+                </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="removeStaff" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-trash-alt"></i> Remove</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <!-- <button type="submit" class="btn btn-primary">Register</button> -->
+                </div>
+                </div>
+            </div>
+            </div>
+
             <div class="card-footer clearfix">
                 <div class="row">
                     <div class="col-sm-12 col-md-5">
@@ -269,6 +297,44 @@
 
     });
 }
+
+$(".remove").click(function(){
+    var data = $(this).attr("data-id"); //GET THE DATA IN ATTR
+    event.preventDefault();
+    console.log(data);
+    $(".modal-body #id").val(data);
+    console.log('click');
+})
+
+$("#removeStaff").click(function(){
+    var staffID = document.getElementById("id").value;
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    
+    $.ajax({
+        url: "{{ route('staff.staff-delete') }}?id=" + staffID,
+        type: 'delete',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'DELETE',
+        success: function(response) {
+            console.log(response);
+            toastr.success(response['message']);
+            // $('#response').html('<span class="text-success">'+response.message+'</span>').fadeIn(500).fadeOut(5000);
+            setTimeout(function (){
+                window.location = response['url'];
+            }, 3000);
+        },
+        error: function(response) {
+
+        }
+
+    });
+    console.log('removing staff with id:',staffID);
+})
 
 $(".view").click(function() {
   

@@ -17,12 +17,21 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <!-- /.login-logo -->
-  <div class="card card-outline card-primary">
+  <div class="card card-outline card-success">
     <div class="card-header text-center">
-      <a href="../../index2.html" class="h1"><b>Admin</b>LTE</a>
+      <a href="../../index2.html" class="h1"><b>HRMS</b></a>
     </div>
     <div class="card-body">
+      <div class="card-image text-center">
+        <img class="animation__wobble" src="{{asset('logo_fd.jpg')}}" alt="FDLogo" height="100" width="60">
+      </div>
+      <br>
       <p class="login-box-msg">Sign in to start your session</p>
+      @if ($errors->has('login'))
+        <div class="alert alert-danger">
+            <center>{{ $errors->first('login') }}</center>
+        </div>
+      @endif
 
       <form method="POST" action="{{ route('login') }}">
         @csrf
@@ -53,7 +62,7 @@
           </div>
           <!-- /.col -->
           <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+            <button type="submit" class="btn btn-success btn-block">Sign In</button>
           </div>
           <!-- /.col -->
         </div>

@@ -10,10 +10,19 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="{{asset('backend/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
+          @if(!empty(auth()->user()->hasStaff->image_path))
+          <img src="{{asset('storage/'.auth()->user()->hasStaff->image_path)}}" class="img-circle elevation-2" alt="User Image" style="width: 3rem;">
+          @else
+          <img src="{{asset('default_picture.jpg')}}" class="img-circle elevation-2" alt="User Image" style="width: 3rem;">
+          @endif
         </div>
         <div style="padding: 0 1px 0 5px; white-space: normal;" class="info">
           <a href="#" class="d-block">{{auth()->user()->name}}</a>
+          @if(!empty(auth()->user()->hasStaff->hasPosition))
+          <span>{{auth()->user()->hasStaff->hasPosition->desc}}</span>
+          @else
+          <span></span>
+          @endif
         </div>
       </div>
 

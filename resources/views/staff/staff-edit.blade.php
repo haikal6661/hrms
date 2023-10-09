@@ -1,6 +1,63 @@
 @extends('backend.layouts.app')
 @section('content')
 
+<style>
+    .image-area {
+  position: relative;
+    }
+    .image-area img{
+    max-width: 100%;
+    height: auto;
+    }
+    .remove-image {
+    display: none;
+    position: absolute;
+    top: 5px;
+    right: 15px;
+    border-radius: 10em;
+    padding: 2px 6px 3px;
+    text-decoration: none;
+    font: 700 21px/20px sans-serif;
+    background: #555;
+    border: 3px solid #fff;
+    color: #FFF;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    -webkit-transition: background 0.5s;
+    transition: background 0.5s;
+    }
+    .remove-image:hover {
+    background: #E54E4E;
+    padding: 3px 7px 5px;
+    top: 5px;
+    right: 15px;
+    }
+    .remove-image:active {
+    background: #E54E4E;
+    top: 6px;
+    right: 15px;
+    }
+
+    .image-area .overlay {
+    position: absolute; 
+    bottom: 0; 
+    background-color: rgba(0, 0, 0, 0.5); /* Black see-through */
+    color: #f1f1f1; 
+    width: 100%;
+    transition: .5s ease;
+    opacity:0;
+    color: white;
+    font-size: 20px;
+    padding: 20px;
+    text-align: center;
+    }
+
+    .image-area:hover .overlay {
+    opacity: 1;
+    }
+
+</style>
+
 <div class="content-wrapper">
     <div class="content-header">
     <div class="container-fluid">
@@ -21,6 +78,20 @@
                         <i class="fa fa-plus"></i> Staff</button> -->
                 </div>
                 <div class="card-body">
+                    <div class="row d-flex justify-content-center">
+                        <div class="row">
+                            <div class="image-area" style="cursor:pointer">
+                                <input type='file' id="imgInp" style="display:none" />
+                                <img id="blah" style="border-radius:50%; border-style:outset" src="{{asset('default_picture.jpg')}}" alt="your image" height="200" width="200"/>
+                                <!-- <div class="overlay" style="border-radius:0 0 10em 10em; height:100px; width:200px;">Change</div> -->
+                                <a class="remove-image" href="#" style="display: inline; color:white;">&#215;</a>
+                            </div>
+                        
+                        </div>
+                    </div>
+                    <div class="row d-flex justify-content-center mb-3">
+                        <label for="profile_picture">Profile Picture</label>
+                    </div>
                     <div class="row">
                         <div class="col">
                         <form id="update_staff_form">
@@ -174,7 +245,53 @@
 
 $(document).ready(function(){
 
+    $('#blah').click(function(){
+        $('#imgInp').click();
+    })
 
+
+function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                $('#blah').attr('src', e.target.result);
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+    $("#imgInp").change(function(){
+        readURL(this);
+    });
+
+
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+  const imgInp = document.getElementById("imgInp");
+  const imgElem = document.getElementById("blah");
+  const removeImageLink = document.querySelector(".remove-image");
+
+  imgInp.addEventListener("change", function() {
+    const file = imgInp.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        imgElem.src = e.target.result;
+        removeImageLink.style.display = "inline"; // Show the "Remove" link
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  removeImageLink.addEventListener("click", function(event) {
+    event.preventDefault();
+    imgElem.src = "{{asset('default_picture.jpg')}}";
+    imgInp.value = ""; // Reset file input
+    removeImageLink.style.display = "none"; // Hide the "Remove" link
+  });
 });
 
 function submitStaffUpdate(id, result){

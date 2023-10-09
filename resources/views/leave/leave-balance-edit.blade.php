@@ -61,8 +61,9 @@
                     @endforeach
                 </div>
                 @empty
-                @foreach($refleavetype as $leave)
+                @foreach($refleavetype->chunk(3) as $chunk)
                 <div class="row">
+                @foreach($chunk as $leave)
                 <div class="form-group col-md-4">
                     <div class="col-md-6">
                         <label for="">{{$leave->desc}} :</label>
@@ -71,6 +72,7 @@
                         </div>
                     </div>
                 </div>
+                @endforeach
                 </div>
                 @endforeach
                 @endforelse

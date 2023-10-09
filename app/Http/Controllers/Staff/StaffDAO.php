@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class StaffDAO extends Controller {
     //store staff
@@ -62,12 +63,38 @@ class StaffDAO extends Controller {
 
         $staff = Staff::find($staff_id);
 
+        $request->validate([
+                'image' => 'image:jpeg,png,jpg|max:2048',
+            ],[
+                'image.image' => 'Please enter the correct format. eg:jpeg,png,jpg',
+                'image.mimes' => 'Please enter the correct format. eg:jpeg,png,jpg',
+        ]);
+
+        $image = $request->file('image');
+
         if($request->result == "profile"){
-            $data = [
-                'ic_no' => $request->ic_no,
-                'address' => $request->address,
-                'phone_no' => $request->phone_no,
-            ];
+
+            if($image){
+                $imageName = $image->getClientOriginalName();
+
+                $data = [
+                    'ic_no' => $request->ic_no,
+                    'address' => $request->address,
+                    'phone_no' => $request->phone_no,
+                    'image' => $imageName,
+                    'image_path' => 'images/profile_picture/'.$imageName,
+                ];
+    
+                // $request->image->storeAs('images/profile_picture/',$imageName.$imageExt);
+                Storage::disk('public')->put('images/profile_picture/'.$imageName, file_get_contents($image));
+            }else{
+                $data = [
+                    'ic_no' => $request->ic_no,
+                    'address' => $request->address,
+                    'phone_no' => $request->phone_no,
+                ];
+            }
+
         }else{
 
             $data = [
@@ -97,11 +124,25 @@ class StaffDAO extends Controller {
             ];
         }else{
             return $respones = [
-                'message' => "Something went wrong.",
+                'message' => 'Something went wrong.',
             ];
         }
+    }
 
-        
+    public function deleteStaff(Request $request){
+        $staff_id = $request->id;
+
+        $staff = Staff::where('id',$staff_id)->first();
+        $user_id = $staff->user_id;
+        User::where('id',$user_id)->delete();
+        $staff->delete();
+
+        $url = route('staff.staff-list');
+
+        return $respones = [
+            'message' => "Staff has been deleted.",
+            'url' => $url,
+        ];
     }
 
     public function sendEmail($information,$request){

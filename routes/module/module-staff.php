@@ -8,7 +8,7 @@ use App\Models\RefPosition;
 use App\Models\Staff;
 use Illuminate\Support\Facades\Auth;
 
-Route::group(['prefix' => 'staff', 'as' => 'staff', 'middleware' => 'auth'], function(){
+Route::group(['prefix' => 'staff', 'as' => 'staff', 'middleware' => ['role:Admin|HOD']], function(){
 
     //register staff
     Route::post('/staff-store', function(Request $request){
@@ -73,6 +73,12 @@ Route::group(['prefix' => 'staff', 'as' => 'staff', 'middleware' => 'auth'], fun
         $StaffDAO = new StaffDAO();
         return $StaffDAO->updateStaff($request);
     })->name('.staff-update');
+
+    //delete staff
+    Route::delete('/staff-delete', function(Request $request){
+        $StaffDAO = new StaffDAO();
+        return $StaffDAO->deleteStaff($request);
+    })->name('.staff-delete');
 
     Route::get('/getStaffDetail', function(Request $request){
 

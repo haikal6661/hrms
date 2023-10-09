@@ -18,6 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
             $table->string('fullname',50)->nullable();
+            $table->string('image',50)->nullable();
+            $table->string('image_path',50)->nullable();
             $table->string('email',50)->nullable();
             $table->string('ic_no',14)->nullable();
             $table->string('address',150)->nullable();
