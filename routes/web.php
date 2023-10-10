@@ -23,6 +23,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/notifications', function () {
+    return view('backend.layouts.notifications');
+})->name('notifications');
 
 //----------Module Staff routes start----------
 require __DIR__.'/module/module-staff.php';

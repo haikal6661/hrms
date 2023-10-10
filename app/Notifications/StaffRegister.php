@@ -7,17 +7,18 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class SendEmailNewUser extends Notification
+class StaffRegister extends Notification
 {
     use Queueable;
 
-    public $details;
+    protected $details;
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
+
     public function __construct($details)
     {
         $this->details = $details;
@@ -43,9 +44,7 @@ class SendEmailNewUser extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->subject('New Registration')
-                    ->greeting($this->details['greeting'])
-                    ->line($this->details['body'])
+                    ->line('The introduction to the notification.')
                     ->action('Notification Action', url('/'))
                     ->line('Thank you for using our application!');
     }
@@ -59,7 +58,7 @@ class SendEmailNewUser extends Notification
     public function toArray($notifiable)
     {
         return [
-            'data' => ''
+            'data' => 'Hye! '. $this->details . ' . Your account has been created.'
         ];
     }
 }

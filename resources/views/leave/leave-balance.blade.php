@@ -1,6 +1,10 @@
 @extends('backend.layouts.app')
 @section('content')
 
+@php
+$user_role = auth()->user()->roles->first()->name;
+@endphp
+
 <div class="content-wrapper">
     <div class="content-header">
     <div class="container-fluid">
@@ -16,18 +20,65 @@
                 <div class="col-md-12">
                 <div class="card">
                     <div style="display: inline-flex;" class="card-header">
+                    @role('Admin')
                     <h3 class="card-title col-md-11">List of staff leave balance (Days)</h3>
+                    @else
+                    <h3 class="card-title col-md-11">Leave balance (Days)</h3>
+                    @endrole
                     <!-- <button type="button" class="btn btn-success btn-block btn-sm" title="Register new staff" data-toggle="modal" data-target="#registerModal">
                         <i class="fa fa-plus"></i> Staff</button> -->
                 </div>
                 <div class="card-body">
+                @if($user_role == "User")
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group row" style="margin-bottom: 0px;">
+                                <label for="">&ensp;&nbsp; Name :</label>
+                                <p>&nbsp; {{$detail->fullname}}</p>
+                            </div>
+                            <div class="form-group row" style="margin-bottom: 0px;">
+                                <label for="">&ensp;&nbsp; Email :</label>
+                                <p>&nbsp; {{$detail->email}}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group row" style="margin-bottom: 0px;">
+                                <label for="">&ensp;&nbsp; Position :</label>
+                                <p>&nbsp; {{$detail->hasPosition->desc}}</p>
+                            </div>
+                            <div class="form-group row" style="margin-bottom: 0px;">
+                                <label for="">&ensp;&nbsp; Department :</label>
+                                <p>&nbsp; {{$detail->hasDepartment->desc}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    @forelse($balance->chunk(3) as $chunk)
+                        <div class="row">
+                            @foreach($chunk as $leave)
+                            <div class="form-group col-md-4">
+                                <div class="col-md-6">
+                                    <label for="">{{$leave->hasLeaveName->desc}} :</label>
+                                    <div class="input-group">
+                                        <input class="form-control" type="text" name="leave[{{$leave->leave_type_id}}]" id="{{$leave->id}}" value="{{$leave->balance}}" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                        @empty
+                        <h4>No leaves entitled yet.</h4>
+                    @endforelse
+                @else
                 <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th style="width: 10px">No.</th>
                                 <th>Name</th>
                                 <th>Leaves</th>
+                                @role('Admin')
                                 <th>Action</th>
+                                @endrole
                             </tr>
                         </thead>
                         <tbody>
@@ -60,6 +111,7 @@
                                     @endfor
                                     </div>
                                 </td>
+                                @role('Admin')
                                 <td>
                                 <div class="row">
                                         <div class="col-4">
@@ -67,10 +119,12 @@
                                         </div>
                                     </div>
                                 </td>
+                                @endrole
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
+                @endif
                 </div>
                 <div class="modal fade" id="leaveEntitlementModal" tabindex="-1" aria-labelledby="leaveEntitlementModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -113,6 +167,7 @@
             </div>
             </div>
             <div class="card-footer clearfix">
+                @role('Admin')
                 <div class="row">
                     <div class="col-sm-12 col-md-5">
                         <div class="dataTables_info" aria-live="polite">Showing {{$staffList->firstItem()}} to {{$staffList->lastItem()}} of {{$staffList->total()}} entries</div>
@@ -125,6 +180,7 @@
                         </div>
                     </div>
                 </div>
+                @endrole
                 </div>
                 </div>
                 </div>

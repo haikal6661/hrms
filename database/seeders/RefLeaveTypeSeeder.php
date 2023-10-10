@@ -68,13 +68,6 @@ class RefLeaveTypeSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => NULL,
             ),
-            7 =>
-            array (
-                'code' => '08',
-                'desc' => 'Work From Home',
-                'created_at' => Carbon::now(),
-                'updated_at' => NULL,
-            ),
         )
         );
     }

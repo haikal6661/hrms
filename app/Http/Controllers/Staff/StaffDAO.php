@@ -7,6 +7,7 @@ use App\Models\Staff;
 use App\Models\User;
 use Notification;
 use App\Notifications\SendEmailNewUser;
+use App\Notifications\StaffRegister;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -33,6 +34,7 @@ class StaffDAO extends Controller {
         ];
 
         $user = User::create($user_data);
+        $user->assignRole('User');
         $this->sendEmail($user,$request);
         $user_id = $user->id;
 
@@ -49,6 +51,8 @@ class StaffDAO extends Controller {
         $url = route('staff.staff-list');
 
         Staff::create($staff_data);
+
+        User::find($user_id)->notify(new StaffRegister($user->name));
 
         return $response = [
             'message' => "Staff added successfully.",

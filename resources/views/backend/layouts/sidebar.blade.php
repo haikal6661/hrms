@@ -51,6 +51,7 @@
               </p>
             </a>
           </li>
+          @role('Admin')
           <li class="nav-item">
             <a href="{{route ('staff.staff-list')}}" class="nav-link">
               <i class="nav-icon fas fa-users"></i>
@@ -60,6 +61,7 @@
               </p>
             </a>
           </li>
+          @endrole
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
@@ -96,6 +98,7 @@
               </li>
             </ul>
           </li>
+          @role('Admin')
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-user-cog"></i>
@@ -119,6 +122,7 @@
               </li>
             </ul>
           </li>
+          @endrole
           <li class="nav-item">
             <a href="{{route ('staff.staff-profile')}}" class="nav-link">
               <i class="nav-icon fas fa-user"></i>

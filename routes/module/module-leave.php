@@ -26,27 +26,64 @@ Route::group(['prefix' => 'leave', 'as' => 'leave', 'middleware' => 'auth'], fun
     //leave balance list
     Route::get('/leave-balance', function(Request $request){
 
-        $staffList = Staff::paginate(10);
-        $refleavetype = RefLeaveType::all();
-        
-        return view('leave.leave-balance', [
-            'staffList' => $staffList,
-            'refleavetype' => $refleavetype,
-        ]);
+        $detail = [];
+        if(auth()->user()->roles->first()->name == "User"){
+            $staff_id = auth()->user()->hasStaff->id;
+            $detail = Staff::find($staff_id);
+            $balance = StaffLeave::where('staff_id', $staff_id)->get();
+
+            $staffList = Staff::paginate(10);
+            $refleavetype = RefLeaveType::all();
+
+            return view('leave.leave-balance', [
+                'staffList' => $staffList,
+                'refleavetype' => $refleavetype,
+                'detail' => $detail,
+                'balance' => $balance,
+            ]);
+        }else{
+
+            $staffList = Staff::paginate(10);
+            $refleavetype = RefLeaveType::all();
+            
+            return view('leave.leave-balance', [
+                'staffList' => $staffList,
+                'refleavetype' => $refleavetype,
+            ]);
+        }
 
     })->name('.leave-balance');
 
     //leave entitlement list
     Route::get('/leave-entitlement', function(Request $request){
 
-        $staffList = Staff::paginate(10);
-        $refleavetype = RefLeaveType::all();
+        $detail = [];
+        if(auth()->user()->roles->first()->name == "User"){
+            $staff_id = auth()->user()->hasStaff->id;
+            $detail = Staff::find($staff_id);
+            $entitlement = StaffLeave::where('staff_id', $staff_id)->get();
 
+            $staffList = Staff::paginate(10);
+            $refleavetype = RefLeaveType::all();
+
+            return view('leave.leave-entitlement', [
+                'staffList' => $staffList,
+                'refleavetype' => $refleavetype,
+                'detail' => $detail,
+                'entitlement' => $entitlement,
+            ]);
+        }else{
+
+            $staffList = Staff::paginate(10);
+            $refleavetype = RefLeaveType::all();
+            
+            return view('leave.leave-entitlement', [
+                'staffList' => $staffList,
+                'refleavetype' => $refleavetype,
+            ]);
+        }
         
-        return view('leave.leave-entitlement', [
-            'staffList' => $staffList,
-            'refleavetype' => $refleavetype,
-        ]);
+        
 
     })->name('.leave-entitlement');
 

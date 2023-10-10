@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Spatie\Permission\Models\Role;
 
-Route::group(['prefix' => 'uac', 'as' => 'uac', 'middleware' => 'auth'], function(){
+Route::group(['prefix' => 'uac', 'as' => 'uac', 'middleware' => ['role:Admin']], function(){
 
     //show role page
     Route::get('/role-list', function(Request $request){

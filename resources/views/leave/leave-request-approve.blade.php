@@ -8,7 +8,7 @@
 
 
     .col-sm-2 {
-        max-width: 12%;
+        max-width: 15%;
     }
 
     .form-group {

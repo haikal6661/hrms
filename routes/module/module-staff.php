@@ -8,27 +8,39 @@ use App\Models\RefPosition;
 use App\Models\Staff;
 use Illuminate\Support\Facades\Auth;
 
-Route::group(['prefix' => 'staff', 'as' => 'staff', 'middleware' => ['role:Admin|HOD']], function(){
+Route::group(['prefix' => 'staff', 'as' => 'staff', 'middleware' => 'auth'], function(){
 
-    //register staff
-    Route::post('/staff-store', function(Request $request){
-        $StaffDAO = new StaffDAO();
-        return $StaffDAO->storeStaff($request);
-    })->name('.staff-store');
 
-    //show staff page
-    Route::get('/staff-list', function(Request $request){
+    Route::group(['middleware' => ['role:Admin']], function () {
 
-        $refposition = RefPosition::all();
-        $refdepartment = RefDepartment::all();
-        $stafflist = Staff::paginate(10);
+        //register staff
+        Route::post('/staff-store', function(Request $request){
+            $StaffDAO = new StaffDAO();
+            return $StaffDAO->storeStaff($request);
+        })->name('.staff-store');
 
-        return view('staff.staff-list', [
-            'refposition' => $refposition,
-            'refdepartment' => $refdepartment,
-            'stafflist' => $stafflist,
-        ]);
-    })->name('.staff-list');
+        //show list staff page
+        Route::get('/staff-list', function(Request $request){
+
+            $refposition = RefPosition::all();
+            $refdepartment = RefDepartment::all();
+            $stafflist = Staff::paginate(10);
+
+            return view('staff.staff-list', [
+                'refposition' => $refposition,
+                'refdepartment' => $refdepartment,
+                'stafflist' => $stafflist,
+            ]);
+        })->name('.staff-list');
+
+        //delete staff
+        Route::delete('/staff-delete', function(Request $request){
+            $StaffDAO = new StaffDAO();
+            return $StaffDAO->deleteStaff($request);
+        })->name('.staff-delete');
+    });
+
+    
 
     //edit staff page
     Route::get('/staff-edit', function(Request $request){
@@ -73,12 +85,6 @@ Route::group(['prefix' => 'staff', 'as' => 'staff', 'middleware' => ['role:Admin
         $StaffDAO = new StaffDAO();
         return $StaffDAO->updateStaff($request);
     })->name('.staff-update');
-
-    //delete staff
-    Route::delete('/staff-delete', function(Request $request){
-        $StaffDAO = new StaffDAO();
-        return $StaffDAO->deleteStaff($request);
-    })->name('.staff-delete');
 
     Route::get('/getStaffDetail', function(Request $request){
 
