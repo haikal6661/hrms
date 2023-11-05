@@ -11,7 +11,7 @@ class FullCalendarController extends Controller
     {
         if($request->ajax()) {  
             $events = LeaveApplication::with('hasStaff')->whereDate('start_date', '>=', $request->start)
-                ->whereDate('end_date',   '<=', $request->end)
+                ->whereDate('end_date', '<=', $request->end)
                 ->get();
 
 
@@ -20,7 +20,7 @@ class FullCalendarController extends Controller
                 $data[] = [
                     'title' => $row->hasStaff->fullname,
                     'start' => $row->start_date,
-                    'end' => $row->end_date,
+                    'end' => date('Y-m-d', strtotime($row->end_date . ' +1 day')),
                     'leave_type' => $row->hasLeaveName->desc,
                     'status_id' => $row->status_id,
                 ];

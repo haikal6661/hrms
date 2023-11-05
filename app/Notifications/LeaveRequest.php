@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class StaffRegister extends Notification
+class LeaveRequest extends Notification
 {
     use Queueable;
 
@@ -18,7 +18,6 @@ class StaffRegister extends Notification
      *
      * @return void
      */
-
     public function __construct($details)
     {
         $this->details = $details;
@@ -58,8 +57,8 @@ class StaffRegister extends Notification
     public function toArray($notifiable)
     {
         return [
-            'data' => 'Hye! '. $this->details . ' . Your account has been created.',
-            'route' => '#',
+            'data' => 'You have a leave application from the staff to respond.',
+            'route' => route('leave.leave-request-approve','id='.$this->details), // $this->id is the notification ID
         ];
     }
 }

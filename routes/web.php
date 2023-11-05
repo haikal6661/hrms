@@ -39,5 +39,9 @@ require __DIR__.'/module/module-leave.php';
 require __DIR__.'/module/module-uac.php';
 //----------Module Leave routes end-----------
 
+//----------Module Notification routes start----------
+require __DIR__.'/module/module-notification.php';
+//----------Module Notification routes end-----------
+
 Route::get('send', [LeaveDAO::class,"sendEmail"]);
 Route::get('calendar-event', [FullCalendarController::class, 'index']);

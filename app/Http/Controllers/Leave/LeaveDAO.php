@@ -11,6 +11,7 @@ use App\Models\RefLeaveType;
 use App\Models\Staff;
 use App\Models\StaffLeave;
 use App\Models\User;
+use App\Notifications\LeaveRequest as NotificationsLeaveRequest;
 use Notification;
 use App\Notifications\SendEmailNewUser;
 use App\Notifications\SendLeaveRequest;
@@ -256,6 +257,7 @@ class LeaveDAO extends Controller
         ];
 
         Mail::to($supervisor->email)->send(new LeaveRequest($details));
+        User::find($supervisor->id)->notify(new NotificationsLeaveRequest($leaveApplication->id));
     }
 
     public function sendEmailApproval($information){

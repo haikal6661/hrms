@@ -53,16 +53,35 @@
         <div class="row">
           <div class="col-md-12">
             <div class="card">
-              <div class="card-header">
-                <h5 class="card-title">You have {{auth()->user()->unreadNotifications->count()}} <i class="fas fa-envelope mr-2"></i> unread notification.</h5>
-              </div><br>
+            <div class="card-header">
+              <div class="row">
+                  <div class="col-md-8">
+                  <h5 class="card-title">You have {{ auth()->user()->unreadNotifications->count() }} <i class="fas fa-envelope mr-2"></i>unread notification.</h5>
+                  </div>
+                  <div class="col-md-2">
+                    <button class="btn btn-block btn-primary" id="markAsReadButton"><i class="fas fa-envelope-open"></i> Mark as Read</button>
+                  </div>
+                  <div class="col-md-2">
+                    <button class="btn btn-block btn-danger" id="delete"><i class="fas fa-trash-alt"></i> Delete</button>
+                  </div>
+              </div>
+          </div><br>
               <!-- /.card-header -->
               <div style="margin-left: 100px; margin-right: 100px;">
-              @foreach (auth()->user()->unreadNotifications as $notification)
+              @foreach (auth()->user()->notifications as $notification)
               <div class="card">
-              <div class="card-body">
+              <div style="padding-left: 40px;" class="card-body">
+                    <input class="form-check-input" type="checkbox" name="notification[]" id="notification{{ $notification->id }}" value="{{ $notification->id }}" data-id="{{ $notification->id }}">
                     <!-- <h5 class="card-title">Special title treatment</h5> -->
-                    <p class="card-text text-primary">{{$notification->data['data']}}</p>
+                    <!-- <p class="card-text {{ $notification->read_at ? 'text-muted' : 'text-primary' }}">{{$notification->data['data']}}</p> -->
+                    @if(isset($notification->data['route']))
+                        <!-- <a class="card-text {{ $notification->read_at ? 'text-muted' : 'text-primary' }}" href="{{ $notification->data['route'] }}">{{ $notification->data['data'] }}</a> -->
+                        <a class="card-text {{ $notification->read_at ? 'text-muted' : 'text-primary' }}" href="{{ route('notification.mark-as-read', ['notification' => $notification->id, 'route' => $notification->data['route']]) }}">
+                {{ $notification->data['data'] }}
+            </a>
+                    @else
+                        
+                    @endif
                     <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
                 </div>
                 <div class="card-footer text-muted">
@@ -92,7 +111,46 @@
   <script>
     $(document).ready(function () {
 
-        });
+      const markAsReadButton = document.getElementById('markAsReadButton');
+      const checkboxes = document.querySelectorAll('.form-check-input');
+
+      markAsReadButton.addEventListener('click', function() {
+        console.log('click');
+          const selectedIds = [];
+
+          checkboxes.forEach(checkbox => {
+              if (checkbox.checked) {
+                  selectedIds.push(checkbox.getAttribute('data-id'));
+                  checkbox.checked = false; // Uncheck the checkbox
+              }
+          });
+
+          if (selectedIds.length > 0) {
+
+              $.ajax({
+                url: "{{ route('notification.notification-read') }}",
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}' // If you're using Laravel's CSRF protection
+                },
+                data: { selectedIds: selectedIds },
+                method: 'POST',
+                success: function(response) {
+                    toastr.success(response['message']);
+                    // $('#response').html('<span class="text-success">'+response.message+'</span>').fadeIn(500).fadeOut(5000);
+                    window.location = response['url'];
+                    // parent.stopLoading();
+                },
+                error: function(response) {
+                    toastr.error(response['message']);
+
+                }
+
+            });
+              console.log('Marking as read:', selectedIds);
+          }
+      });
+
+});
   </script>
 
   @endsection

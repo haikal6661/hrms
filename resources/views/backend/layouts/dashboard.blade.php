@@ -189,7 +189,7 @@
                 displayEventTime: true,
                 height: 800,
                 eventRender: function (event, element, view) {
-                  console.log(element[0]);
+                  console.log(event);
                   element.find('.fc-title').append(" - " + event.leave_type);
                   if(event.status_id == 6){
                     element.css('background-color', '#21ae00');
@@ -200,11 +200,8 @@
                   if(event.status_id == 5){
                     element.css('background-color', '#17a2b8');
                   }
-                    if (event.allDay === 'true') {
-                        event.allDay = true;
-                    } else {
-                        event.allDay = false;
-                    }
+                    
+                  event.allDay = true; // Set allDay property to true for all events
                 },
                 selectable: false,
                 selectHelper: false,
