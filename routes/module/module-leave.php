@@ -103,15 +103,48 @@ Route::group(['prefix' => 'leave', 'as' => 'leave', 'middleware' => 'auth'], fun
     //leave application list
     Route::get('/leave-application', function(Request $request){
 
-        $leave_application = LeaveApplication::paginate(10);
+        $user = auth()->user();
+
+        switch (true) {
+            case $user->hasRole('Admin'):
+                // Admin can view all leave applications
+                $leave_application = LeaveApplication::paginate(10);
+                break;
+
+            case $user->hasRole('HOD'):
+            case $user->hasRole('User'):
+                // User can only view their own leave applications
+                $staffId = $user->hasStaff->id;
+                $leave_application = LeaveApplication::where('staff_id', $staffId)->paginate(10);
+                break;
+
+            default:
+                // Handle other roles or unauthorized users here
+                abort(403); // Return a 403 Forbidden response
+    }
+
+    $refleavetype = RefLeaveType::all();
+
+    return view('leave.leave-application', [
+        'leave_application' => $leave_application,
+        'refleavetype' => $refleavetype,
+    ]);
+
+    })->name('.leave-application');
+
+    //subordinates leave application list
+    Route::get('/leave-subordinates-application', function(Request $request){
+
+        $subordinates = Staff::where('supervisor_id', (auth()->user()->hasStaff->id))->get();
+        $leaveApplication = LeaveApplication::whereIn('staff_id', $subordinates->pluck('id'))->paginate(10);
         $refleavetype = RefLeaveType::all();
         
-        return view('leave.leave-application', [
-            'leave_application' => $leave_application,
+        return view('leave.leave-subordinates-application', [
+            'leave_application' => $leaveApplication,
             'refleavetype' => $refleavetype,
         ]);
 
-    })->name('.leave-application');
+    })->name('.leave-subordinates-application');
 
     //leave application action form
     Route::get('/leave-application-approve', function(Request $request){

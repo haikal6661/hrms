@@ -16,11 +16,7 @@
                 <div class="col-md-12">
                 <div class="card">
                     <div style="display: inline-flex;" class="card-header">
-                    @role('Admin')
-                    <h3 class="card-title col-md-11">List of staff leave application</h3>
-                    @else('User')
-                    <h3 class="card-title col-md-11">List of your leave application</h3>
-                    @endrole
+                    <h3 class="card-title col-md-11">List of your subordinates leave application</h3>
                     <!-- <button type="button" class="btn btn-success btn-block btn-sm" title="Register new staff" data-toggle="modal" data-target="#registerModal">
                         <i class="fa fa-plus"></i> Staff</button> -->
                 </div>
@@ -73,15 +69,9 @@
                                 </td> --}}
                                 <td>
                                 <div class="row">
-                                    @role('Admin')
                                         <div class="col-4">
                                             <a href="{{route('leave.leave-request-approve', ['id' => $application->id])}}" role="button" class="btn btn-success btn-sm" title="Approval"><i class="fa fa-edit"></i></a>
                                         </div>
-                                    @else
-                                        <div class="col-4">
-                                            <a href="{{route('leave.leave-request-approve', ['id' => $application->id])}}" role="button" class="btn btn-primary btn-sm" title="View"><i class="fa fa-eye"></i></a>
-                                        </div>
-                                    @endrole
                                     </div>
                                 </td>
                             </tr>

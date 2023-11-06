@@ -91,9 +91,10 @@
                                         <p>{{$detail->reason ?? '-'}}</p>
                                         </div>
                                     </div>
+                                    @if(Auth::user()->hasRole('Admin') || Auth::user()->hasStaff->is_supervisor == 1)
                                     <hr>
                                     <div class="form-group row">
-                                        <label for="" class="col-sm-2 col-form-label">Approval :</label>
+                                        <label for="" class="col-sm-2 col-form-label">Status :</label>
                                     @if($detail->status_id == 5)
                                     <div class="custom-control custom-radio">
                                         <div class="col-4">
@@ -110,7 +111,7 @@
                                     @else
                                     <div class="col-sm-10">
                                         <p>{{$detail->hasStatus->desc}}</p>
-                                        </div>
+                                    </div>
                                     @endif
                                     </div>
                                     <div class="form-group row" id="approval" style="display: none;">
@@ -125,6 +126,39 @@
                                     <button type="button" style="width: 100px;" id="appr_btn" class="btn btn-block btn-success" onclick="submitLeaveApproval({{$detail->id}})" disabled></i>
                                     Submit</button>
                                 </div>
+                                @endif
+                                @else
+                                <hr>
+                                <div class="form-group row">
+                                    <div style="display: flex;" class="col-md-6">
+                                    <label style="margin-top: 1px;" for="" class="col-sm-4 col-form-label">Status :</label>
+                                    <div style="padding-top: 8px;" class="col-sm-8">
+                                    @if($detail->status_id == '6')
+                                    <span style="font-size: 90%;" class="right badge badge-success">{{$detail->hasStatus->desc}}</span>
+                                    @elseif($detail->status_id == '5')
+                                    <span style="font-size: 90%;" class="right badge badge-info">{{$detail->hasStatus->desc}}</span>
+                                    @else
+                                    <span style="font-size: 90%;" class="right badge badge-danger">{{$detail->hasStatus->desc}}</span>
+                                    @endif
+                                    </div>
+                                    </div>
+                                </div>
+                                @if($detail->status_id == '6')
+                                <div class="form-group row">
+                                    <div style="display: flex;" class="col-md-6">
+                                    <label style="margin-top: 1px;" for="" class="col-sm-4 col-form-label">Approved By :</label>
+                                    <div style="padding-top: 4px;" class="col-sm-8">
+                                        <p>{{auth()->user()->hasStaff->hasSupervisor->fullname}}</p>
+                                    </div>
+                                    </div>
+                                    <div style="display: flex;" class="col-md-6">
+                                    <label style="margin-top: 1px;" for="" class="col-sm-4 col-form-label">Approved On :</label>
+                                    <div style="padding-top: 4px;" class="col-sm-8">
+                                        <p>{{$detail->updated_at->format('d/m/Y')}}</p>
+                                    </div>
+                                    </div>
+                                </div>
+                                @endif
                                 @endif
                             </div>
                             </form>

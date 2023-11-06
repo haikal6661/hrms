@@ -1,3 +1,22 @@
+@php
+
+use App\Models\Staff;
+use App\Models\LeaveApplication;
+
+$hasStaff = auth()->user()->hasStaff;
+
+if ($hasStaff) {
+    $subordinates = Staff::where('supervisor_id', $hasStaff->id)->get();
+    $total_waiting = $leaveApplications = LeaveApplication::whereIn('staff_id', $subordinates->pluck('id'))
+    ->where('status_id', 5)
+    ->paginate(10);
+} else {
+  
+}
+
+
+@endphp
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="index3.html" class="brand-link">
@@ -68,7 +87,11 @@
               <p>
                 Leaves
                 <i class="fas fa-angle-left right"></i>
-                <!-- <span class="badge badge-info right">6</span> -->
+                @if(auth()->user()->hasStaff?->is_supervisor == 1)
+                @if(count($total_waiting) > 0)
+                <span class="badge badge-info right">!</span>
+                @endif
+                @endif
               </p>
             </a>
             <ul class="nav nav-treeview">
@@ -84,6 +107,17 @@
                   <p>Leave Applications</p>
                 </a>
               </li>
+              @if(auth()->user()->hasStaff?->is_supervisor == 1)
+              <li class="nav-item">
+                <a href="{{route ('leave.leave-subordinates-application')}}" class="nav-link">
+                  <!-- <i class="far fa-circle nav-icon"></i> -->
+                  <p>Subordinates Leave Applications</p>
+                  @if(count($total_waiting) > 0)
+                  <span class="right badge badge-info">{{count($total_waiting)}}</span>
+                  @endif
+                </a>
+              </li>
+              @endif
               <li class="nav-item">
                 <a href="{{route ('leave.leave-balance')}}" class="nav-link">
                   <!-- <i class="far fa-circle nav-icon"></i> -->
