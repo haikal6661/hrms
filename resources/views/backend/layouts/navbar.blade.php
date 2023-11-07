@@ -96,7 +96,7 @@
       </li> -->
       <!-- Notifications Dropdown Menu -->
       <li class="nav-item dropdown">
-        <a class="nav-link" href="{{route ('notifications')}}">
+        <a class="nav-link" href="{{route ('notification.notifications')}}">
           <i class="far fa-bell"></i>
           <span class="badge badge-warning navbar-badge">{{auth()->user()->unreadNotifications->count()}}</span>
         </a>

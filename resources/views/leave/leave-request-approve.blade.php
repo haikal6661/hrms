@@ -158,6 +158,15 @@
                                     </div>
                                     </div>
                                 </div>
+                                @else($detail->status_id == '8')
+                                <div class="form-group row">
+                                    <div style="display: flex;" class="col-md-6">
+                                    <label style="margin-top: 1px;" for="" class="col-sm-4 col-form-label">Remarks :</label>
+                                    <div style="padding-top: 4px;" class="col-sm-8">
+                                        <p>{{$detail->supervisor_remark}}</p>
+                                    </div>
+                                    </div>
+                                </div>
                                 @endif
                                 @endif
                             </div>

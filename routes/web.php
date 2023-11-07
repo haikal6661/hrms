@@ -3,6 +3,7 @@
 use App\Http\Controllers\FullCalendarController;
 use App\Http\Controllers\Leave\LeaveDAO;
 use App\Http\Controllers\Staff\StaffDAO;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,9 +24,6 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('/notifications', function () {
-    return view('backend.layouts.notifications');
-})->name('notifications');
 
 //----------Module Staff routes start----------
 require __DIR__.'/module/module-staff.php';

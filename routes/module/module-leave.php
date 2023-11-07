@@ -101,7 +101,7 @@ Route::group(['prefix' => 'leave', 'as' => 'leave', 'middleware' => 'auth'], fun
     })->name('.leave-history');
 
     //leave application list
-    Route::get('/leave-application', function(Request $request){
+    Route::get('/leave-application-list', function(Request $request){
 
         $user = auth()->user();
 
@@ -130,7 +130,7 @@ Route::group(['prefix' => 'leave', 'as' => 'leave', 'middleware' => 'auth'], fun
         'refleavetype' => $refleavetype,
     ]);
 
-    })->name('.leave-application');
+    })->name('.leave-application-list');
 
     //subordinates leave application list
     Route::get('/leave-subordinates-application', function(Request $request){

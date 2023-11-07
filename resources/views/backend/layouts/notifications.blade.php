@@ -68,7 +68,7 @@
           </div><br>
               <!-- /.card-header -->
               <div style="margin-left: 100px; margin-right: 100px;">
-              @foreach (auth()->user()->notifications as $notification)
+              @foreach ($notificationList as $notification)
               <div class="card">
               <div style="padding-left: 40px;" class="card-body">
                     <input class="form-check-input" type="checkbox" name="notification[]" id="notification{{ $notification->id }}" value="{{ $notification->id }}" data-id="{{ $notification->id }}">
@@ -90,6 +90,20 @@
               </div>
               @endforeach
                 
+              </div>
+              <div class="card-footer clearfix">
+              <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                        <div class="dataTables_info" aria-live="polite">Showing {{$notificationList->firstItem()}} to {{$notificationList->lastItem()}} of {{$notificationList->total()}} entries</div>
+                    </div>
+                    <div class="col-sm-12 col-md-7">
+                        <div class="dataTables_paginate paging_simple_numbers">
+                            <ul class="pagination pagination m-0 float-right">
+                                {{$notificationList->links()}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
               </div>
             </div>
             <!-- /.card -->

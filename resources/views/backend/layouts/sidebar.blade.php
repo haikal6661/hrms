@@ -102,7 +102,7 @@ if ($hasStaff) {
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{route ('leave.leave-application')}}" class="nav-link">
+                <a href="{{route ('leave.leave-application-list')}}" class="nav-link">
                   <!-- <i class="far fa-circle nav-icon"></i> -->
                   <p>Leave Applications</p>
                 </a>

@@ -208,7 +208,7 @@ class LeaveDAO extends Controller
             $this->sendEmailApproval($request);
         }
 
-        $url = route('leave.leave-application');
+        $url = route('leave.leave-application-list');
 
         return $response = [
             'message' => "Leave Approval Submitted.",
@@ -267,7 +267,10 @@ class LeaveDAO extends Controller
         $leave_id = $information->leave_id;
         $staff = Staff::find($staff_id);
         $leaveApplication = LeaveApplication::find($leave_id);
+
         if($information->approval == 1){
+
+            //if leave request approve
 
             $details = [
                 'subject' => 'Leave Approval',
@@ -283,6 +286,8 @@ class LeaveDAO extends Controller
 
         }else{
 
+            //if leave request reject
+
             $details = [
                 'subject' => 'Leave Approval',
                 'title' => 'Leave Approval '.Carbon::now()->format('d/m/Y'),
@@ -293,6 +298,7 @@ class LeaveDAO extends Controller
             ];
 
             Mail::to($staff->email)->send(new LeaveApproval($details));
+            User::find($staff->user_id)->notify(new NotificationsLeaveApproval($leaveApplication->id));
         }
     }
 
