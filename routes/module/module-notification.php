@@ -28,6 +28,13 @@ Route::group(['prefix' => 'notification', 'as' => 'notification', 'middleware' =
 
     Route::get('/mark-as-read/{notification}', [NotificationController::class,"markAsRead"])->name('.mark-as-read');
 
+    Route::delete('/notification-delete', function(Request $request){
+        
+        $Notification = new NotificationController();
+
+        return $Notification->deleteNotification($request);
+    })->name('.notification-delete');
+
 });
 
 ?>

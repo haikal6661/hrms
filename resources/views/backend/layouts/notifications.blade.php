@@ -62,7 +62,7 @@
                     <button class="btn btn-block btn-primary" id="markAsReadButton"><i class="fas fa-envelope-open"></i> Mark as Read</button>
                   </div>
                   <div class="col-md-2">
-                    <button class="btn btn-block btn-danger" id="delete"><i class="fas fa-trash-alt"></i> Delete</button>
+                    <button class="btn btn-block btn-danger" id="deleteButton"><i class="fas fa-trash-alt"></i> Delete</button>
                   </div>
               </div>
           </div><br>
@@ -129,7 +129,7 @@
       const checkboxes = document.querySelectorAll('.form-check-input');
 
       markAsReadButton.addEventListener('click', function() {
-        console.log('click');
+        
           const selectedIds = [];
 
           checkboxes.forEach(checkbox => {
@@ -151,7 +151,9 @@
                 success: function(response) {
                     toastr.success(response['message']);
                     // $('#response').html('<span class="text-success">'+response.message+'</span>').fadeIn(500).fadeOut(5000);
-                    window.location = response['url'];
+                    setTimeout(function () {
+                      window.location = response['url'];
+                    }, 2000);
                     // parent.stopLoading();
                 },
                 error: function(response) {
@@ -163,6 +165,44 @@
               console.log('Marking as read:', selectedIds);
           }
       });
+
+      deleteButton.addEventListener('click', function() {
+        
+        const selectedIds = [];
+
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                selectedIds.push(checkbox.getAttribute('data-id'));
+                checkbox.checked = false; // Uncheck the checkbox
+            }
+        });
+
+        if (selectedIds.length > 0) {
+
+            $.ajax({
+              url: "{{ route('notification.notification-delete') }}",
+              headers: {
+                  'X-CSRF-TOKEN': '{{ csrf_token() }}' // If you're using Laravel's CSRF protection
+              },
+              data: { selectedIds: selectedIds },
+              method: 'DELETE',
+              success: function(response) {
+                  toastr.success(response['message']);
+                  // $('#response').html('<span class="text-success">'+response.message+'</span>').fadeIn(500).fadeOut(5000);
+                  setTimeout(function () {
+                    window.location = response['url'];
+                  }, 2000);
+                  // parent.stopLoading();
+              },
+              error: function(response) {
+                  toastr.error(response['message']);
+
+              }
+
+          });
+            console.log('Marking as delete:', selectedIds);
+        }
+    });
 
 });
   </script>

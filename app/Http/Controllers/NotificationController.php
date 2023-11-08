@@ -17,7 +17,7 @@ class NotificationController extends Controller
         // dd($selectedIds);
         auth()->user()->notifications()->whereIn('id', $selectedIds)->update(['read_at' => now()]);
 
-        $url = route('notifications');
+        $url = route('notification.notifications');
 
         return $response = [
             'message' => "Notification marked as read.",
@@ -40,5 +40,18 @@ class NotificationController extends Controller
             return redirect()->to($request->route);
         }
         
+    }
+
+    public function deleteNotification(Request $request){
+
+        $selectedIds = $request->input('selectedIds');
+        auth()->user()->notifications()->whereIn('id', $selectedIds)->delete();
+
+        $url = route('notification.notifications');
+
+        return $response = [
+            'message' => "Notification deleted.",
+            'url' => $url,
+        ];
     }
 }
