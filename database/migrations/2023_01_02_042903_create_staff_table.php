@@ -22,8 +22,11 @@ return new class extends Migration
             $table->string('image_path',50)->nullable();
             $table->string('email',50)->nullable();
             $table->string('ic_no',14)->nullable();
+            $table->unsignedBigInteger('gender_id')->nullable();
+            $table->foreign('gender_id')->references('id')->on('ref_gender');
             $table->string('address',150)->nullable();
             $table->string('phone_no',12)->nullable();
+            $table->date('date_of_employment')->nullable();
             $table->unsignedBigInteger('position_id')->nullable();
             $table->foreign('position_id')->references('id')->on('ref_position');
             $table->unsignedBigInteger('department_id')->nullable();

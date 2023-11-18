@@ -19,6 +19,7 @@ class LeaveApplication extends Model
         'leave_type_id',
         'reason',
         'supervisor_remark',
+        'approval_staff_id',
         'status_id',
     ];
 
@@ -32,5 +33,9 @@ class LeaveApplication extends Model
 
     public function hasStatus(){
         return $this->belongsTo(RefStatus::class, 'status_id');
+    }
+
+    public function hasApproval(){
+        return $this->belongsTo(Staff::class, 'approval_staff_id');
     }
 }

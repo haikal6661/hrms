@@ -22,6 +22,7 @@ class Staff extends Model
         'ic_no',
         'address',
         'phone_no',
+        'gender_id',
         'position_id',
         'department_id',
         'supervisor_id',
@@ -32,6 +33,10 @@ class Staff extends Model
 
     public function hasUser(){
         $this->belongsTo(User::class, 'id');
+    }
+
+    public function hasGender(){
+        return $this->belongsTo(RefGender::class, 'gender_id');
     }
 
     public function hasPosition(){

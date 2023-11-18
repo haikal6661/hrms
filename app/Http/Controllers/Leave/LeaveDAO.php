@@ -188,6 +188,7 @@ class LeaveDAO extends Controller
     
             $data2 = [
                 'supervisor_remark' => $request->supervisor_remark,
+                'approval_staff_id' => auth()->user()->hasStaff->id,
                 'status_id' => 6,
             ];
 

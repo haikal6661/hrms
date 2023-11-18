@@ -85,6 +85,7 @@ class StaffDAO extends Controller {
                     'ic_no' => $request->ic_no,
                     'address' => $request->address,
                     'phone_no' => $request->phone_no,
+                    'gender_id' => $request->gender,
                     'image' => $imageName,
                     'image_path' => 'images/profile_picture/'.$imageName,
                 ];
@@ -96,6 +97,7 @@ class StaffDAO extends Controller {
                     'ic_no' => $request->ic_no,
                     'address' => $request->address,
                     'phone_no' => $request->phone_no,
+                    'gender_id' => $request->gender,
                 ];
             }
 

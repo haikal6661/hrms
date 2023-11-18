@@ -130,6 +130,21 @@
                                 </div>
                             </div>
                             </div>
+                            <label for="">Gender :</label>
+                            <div class="input-group mb-3">
+                                <div class="custom-control custom-radio">
+                                    <div class="col-4">
+                                    <input class="custom-control-input" type="radio" id="result1" value="1" {{ $detail->gender_id === 1 ? 'checked' : '' }} name="gender">
+                                    <label for="result1" class="custom-control-label">Male</label>
+                                    </div>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <div class="col-4">
+                                    <input class="custom-control-input" type="radio" id="result2" value="2" {{ $detail->gender_id === 2 ? 'checked' : '' }} name="gender">
+                                    <label for="result2" class="custom-control-label">Female</label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col">
                         <label for="">Address</label>

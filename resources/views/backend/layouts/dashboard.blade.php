@@ -1,6 +1,14 @@
 @extends('backend.layouts.app')
 @section('content')
 
+@php
+
+use App\Models\Staff;
+
+$totalStaff = Staff::count();
+
+@endphp
+
 <style>
   .fc-view-container {
     background-color: grey;
@@ -54,13 +62,11 @@
         <div class="row">
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box">
-              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
+            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
 
-              <div class="info-box-content">
-                <span class="info-box-text">CPU Traffic</span>
-                <span class="info-box-number">
-                  10
-                  <small>%</small>
+                <div class="info-box-content" title="Total Employees">
+                  <span class="info-box-text">Employees</span>
+                  <span class="info-box-number">{{$totalStaff}}</span>
                 </span>
               </div>
               <!-- /.info-box-content -->
@@ -70,11 +76,11 @@
           <!-- /.col -->
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
-              <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
+              <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-calendar-alt"></i></span>
 
-              <div class="info-box-content">
-                <span class="info-box-text">Likes</span>
-                <span class="info-box-number">41,410</span>
+              <div class="info-box-content" title="Total Events for the month">
+                <span class="info-box-text">Events</span>
+                <span class="info-box-number">{{$totalLeave}}</span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -87,11 +93,11 @@
 
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
-              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
+              <span class="info-box-icon bg-info elevation-1"><i class="fas fa-walking" style="color: #203250;"></i></span>
 
-              <div class="info-box-content">
-                <span class="info-box-text">Sales</span>
-                <span class="info-box-number">760</span>
+              <div class="info-box-content" title="Total Leaves for the month">
+                <span class="info-box-text">Track Leaves</span>
+                <span class="info-box-number">{{$totalLeave}}</span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -100,11 +106,15 @@
           <!-- /.col -->
           <div class="col-12 col-sm-6 col-md-3">
             <div class="info-box mb-3">
-              <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+              <span class="info-box-icon bg-success elevation-1"><i class="fas fa-birthday-cake"></i></span>
 
-              <div class="info-box-content">
-                <span class="info-box-text">New Members</span>
-                <span class="info-box-number">2,000</span>
+              <div class="info-box-content" title="Total staff celebrating birthdays this month">
+                <span class="info-box-text">Birthdays</span>
+                @if($totalBirthday > 0)
+                <span class="info-box-number">{{$totalBirthday}} person</span>
+                @else
+                <span class="info-box-number">{{$totalBirthday}}</span>
+                @endif
               </div>
               <!-- /.info-box-content -->
             </div>

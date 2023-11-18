@@ -135,6 +135,21 @@
                                 </div>
                             </div>
                             </div>
+                            <label for="">Gender :</label>
+                            <div class="input-group mb-3">
+                                <div class="custom-control custom-radio">
+                                    <div class="col-4">
+                                    <input class="custom-control-input" type="radio" id="result1" value="1" {{ $staff->gender_id === 1 ? 'checked' : '' }} name="gender">
+                                    <label for="result1" class="custom-control-label">Male</label>
+                                    </div>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <div class="col-4">
+                                    <input class="custom-control-input" type="radio" id="result2" value="2" {{ $staff->gender_id === 2 ? 'checked' : '' }} name="gender">
+                                    <label for="result2" class="custom-control-label">Female</label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col">
                         <label for="">Address :</label>
@@ -287,6 +302,38 @@ function readURL(input) {
         });
 
     });
+
+
+    const icNoInput = document.getElementById("ic_no");
+    const dateOfBirthOutput = document.getElementById("display_DOB");
+
+    icNoInput.addEventListener("input", extractDateOfBirth);
+
+    function extractDateOfBirth() {
+            console.log(icNoInput);
+
+            const icNo = icNoInput.value.trim();
+
+            // if (icNo.length !== 12) {
+            //     dateOfBirthOutput.textContent = "Invalid IC No";
+            //     return;
+            // }
+
+            const year = icNo.substr(0, 2);
+            const month = icNo.substr(2, 2);
+            const day = icNo.substr(4, 2);
+
+            const birthYear = parseInt(year) < 50 ? "20" + year : "19" + year;
+            const dateOfBirth = new Date(birthYear, parseInt(month) - 1, day);
+
+            const formattedDate = dateOfBirth.toLocaleDateString("en-MY", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+            });
+
+            // dateOfBirthOutput.textContent = formattedDate;
+        }
 
 function submitProfileUpdate(id, result){
         $('#staff_id').val(id);

@@ -148,7 +148,7 @@
                                     <div style="display: flex;" class="col-md-6">
                                     <label style="margin-top: 1px;" for="" class="col-sm-4 col-form-label">Approved By :</label>
                                     <div style="padding-top: 4px;" class="col-sm-8">
-                                        <p>{{auth()->user()->hasStaff->hasSupervisor->fullname}}</p>
+                                        <p>{{$detail->hasApproval->fullname}}</p>
                                     </div>
                                     </div>
                                     <div style="display: flex;" class="col-md-6">

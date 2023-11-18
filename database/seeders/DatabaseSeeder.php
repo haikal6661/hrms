@@ -23,5 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(RefLeaveTypeSeeder::class);
         $this->call(RefStatusSeeder::class);
         $this->call(StaffSeeder::class);
+        $this->call(RefGenderSeeder::class);
+        $this->call(LeaveSeeder::class);
     }
 }
