@@ -56,10 +56,6 @@
     opacity: 1;
     }
 
-    #spouse_details {
-        display: none;
-    }
-
 </style>
 
 <div class="content-wrapper">
@@ -212,8 +208,8 @@
                             <div class="input-group mb-3">
                             <select class="form-control select2" name="marriage_status" id="marriage_status" onchange="showDiv('spouse_details', this)">
                                 <option selected="selected" value="">Please select your status...</option>
-                                <option value="Single">Single</option>
-                                <option value="Married">Married</option>
+                                <option value="Single" {{ $staff->hasDetail->marriage_status == 'Single' ? 'selected' : '' }}>Single</option>
+                                <option value="Married" {{ $staff->hasDetail->marriage_status == 'Married' ? 'selected' : '' }}>Married</option>
                             </select>
                             <div class="input-group-append">
                                 <div class="input-group-text">
@@ -226,13 +222,13 @@
                                 
                         </div>
                     </div><br>
-                    <div id="spouse_details">
+                    <div id="spouse_details" style="display: none;">
                     <h4>Spouse Details</h4>
                     <div class="row">
                         <div class="col">
                         <label for="">Name</label>
                             <div class="input-group mb-3">
-                            <input id="spouse_name" type="text" class="form-control @error('spouse_name') is-invalid @enderror" name="spouse_name" value="" required autocomplete="spouse_name" autofocus>
+                            <input id="spouse_name" type="text" class="form-control @error('spouse_name') is-invalid @enderror" name="spouse_name" value="{{$staff->hasDetail->spouse_name}}" required autocomplete="spouse_name" autofocus>
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                 <span class="fas fa-user"></span>
@@ -244,7 +240,7 @@
                         <label for="">Phone No.</label>
                             <div class="input-group mb-3">
                             <input id="spouse_phone_no" type="text" class="form-control @error('spouse_phone_no') is-invalid @enderror" name="spouse_phone_no" 
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="12" placeholder="0123456789" autocomplete="spouse_phone_no" autofocus>
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="12" placeholder="0123456789" value="{{$staff->hasDetail->spouse_phone_no}}" autocomplete="spouse_phone_no" autofocus>
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                 <span class="fas fa-phone"></span>
@@ -257,7 +253,7 @@
                         <div class="col">
                         <label for="">Occupation</label>
                             <div class="input-group mb-3">
-                            <input id="occupation" type="text" class="form-control @error('occupation') is-invalid @enderror" name="occupation" value="" required autocomplete="occupation" autofocus>
+                            <input id="occupation" type="text" class="form-control @error('occupation') is-invalid @enderror" name="occupation" value="{{$staff->hasDetail->occupation}}" required autocomplete="occupation" autofocus>
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                 <span class="fas fa-briefcase"></span>
@@ -268,7 +264,7 @@
                         <div class="col">
                             <label for="">No. Of Children</label>
                             <div class="input-group mb-3">
-                            <input id="no_children" type="number" class="form-control @error('no_children') is-invalid @enderror" name="no_children" value="" required autocomplete="no_children" autofocus>
+                            <input id="no_children" type="number" class="form-control @error('no_children') is-invalid @enderror" name="no_children" value="{{$staff->hasDetail->no_children}}" required autocomplete="no_children" autofocus>
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                 <span class="fas fa-child"></span>
@@ -284,7 +280,7 @@
                     <div class="col">
                         <label for="">Name</label>
                             <div class="input-group mb-3">
-                            <input id="emergency_name" type="text" class="form-control @error('emergency_name') is-invalid @enderror" name="emergency_name" value="" required autocomplete="emergency_name" autofocus>
+                            <input id="emergency_name" type="text" class="form-control @error('emergency_name') is-invalid @enderror" name="emergency_name" value="{{$staff->hasDetail->emergency_name}}" required autocomplete="emergency_name" autofocus>
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                 <span class="fas fa-user"></span>
@@ -296,7 +292,7 @@
                         <label for="">Phone No.</label>
                             <div class="input-group mb-3">
                             <input id="emergency_phone_no" type="text" class="form-control @error('emergency_phone_no') is-invalid @enderror" name="emergency_phone_no" 
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="12" placeholder="0123456789" autocomplete="emergency_phone_no" autofocus>
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="12" placeholder="0123456789" value="{{$staff->hasDetail->emergency_phone_no}}" autocomplete="emergency_phone_no" autofocus>
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                 <span class="fas fa-phone"></span>
@@ -352,10 +348,6 @@
 
 <script type="text/javascript">
 
-function showDiv(divId, element)
-    {
-        document.getElementById(divId).style.display = element.value == 'Married' ? 'block' : 'none';
-    }
 
 $(document).ready(function(){
 
@@ -372,6 +364,26 @@ $(document).ready(function(){
     $('#blah').click(function(){
         $('#imgInp').click();
     })
+
+    // Show/hide the div based on the initial value of the dropdown
+    toggleDivVisibility();
+
+    // Bind an event handler to the dropdown change event
+    $('#marriage_status').on('change', function() {
+        toggleDivVisibility();
+    });
+
+    // Function to toggle the visibility of the div based on the selected value
+    function toggleDivVisibility() {
+        var selectedValue = $('#marriage_status').val();
+
+        // Show the div if the selected value is 'Married', otherwise hide it
+        if (selectedValue == 'Married') {
+            $('#spouse_details').show();
+        } else {
+            $('#spouse_details').hide();
+        }
+    }
 
 
 function readURL(input) {

@@ -32,7 +32,11 @@ class Staff extends Model
     ];
 
     public function hasUser(){
-        $this->belongsTo(User::class, 'id');
+        return $this->belongsTo(User::class, 'id');
+    }
+
+    public function hasDetail(){
+        return $this->hasOne(StaffDetail::class, 'staff_id');
     }
 
     public function hasGender(){
