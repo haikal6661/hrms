@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Staff;
 use App\Http\Controllers\Controller;
 use App\Mail\NewUserRegistered;
 use App\Models\Staff;
+use App\Models\StaffDetail;
 use App\Models\User;
 use Notification;
 use App\Notifications\SendEmailNewUser;
@@ -89,6 +90,20 @@ class StaffDAO extends Controller {
                     'image' => $imageName,
                     'image_path' => 'images/profile_picture/'.$imageName,
                 ];
+
+                $condition = [
+                    'staff_id' => $staff_id,
+                ];
+
+                $data2 = [
+                    'marriage_status' => $request->marriage_status,
+                    'spouse_name' => $request->spouse_name,
+                    'spouse_phone_no' => $request->spouse_phone_no,
+                    'occupation' => $request->occupation,
+                    'no_children' => $request->no_children,
+                    'emergency_name' => $request->emergency_name,
+                    'emergency_phone_no' => $request->emergency_phone_no,
+                ];
     
                 // $request->image->storeAs('images/profile_picture/',$imageName.$imageExt);
                 Storage::disk('public')->put('images/profile_picture/'.$imageName, file_get_contents($image));
@@ -98,6 +113,20 @@ class StaffDAO extends Controller {
                     'address' => $request->address,
                     'phone_no' => $request->phone_no,
                     'gender_id' => $request->gender,
+                ];
+
+                $condition = [
+                    'staff_id' => $staff_id,
+                ];
+
+                $data2 = [
+                    'marriage_status' => $request->marriage_status,
+                    'spouse_name' => $request->spouse_name,
+                    'spouse_phone_no' => $request->spouse_phone_no,
+                    'occupation' => $request->occupation,
+                    'no_children' => $request->no_children,
+                    'emergency_name' => $request->emergency_name,
+                    'emergency_phone_no' => $request->emergency_phone_no,
                 ];
             }
 
@@ -117,6 +146,10 @@ class StaffDAO extends Controller {
         }
 
         $staff->update($data);
+        
+        if($request->result == "profile"){
+            StaffDetail::updateOrCreate($condition,$data2);
+        }
 
         if($request->result == "profile"){
             $message = 'Profile Updated Successfully.';

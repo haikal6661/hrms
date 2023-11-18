@@ -158,7 +158,7 @@
                         <label for="">Phone No.</label>
                             <div class="input-group mb-3">
                             <input id="phone_no" type="text" class="form-control @error('phone_no') is-invalid @enderror" name="phone_no" value="{{$detail->phone_no}}" required 
-                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="12" autocomplete="phone_no" autofocus>
+                            oninput="this.value = this.value.replace(/[^0-9]/g, '');" maxlength="12" placeholder="0123456789" autocomplete="phone_no" autofocus>
                             <div class="input-group-append">
                                 <div class="input-group-text">
                                 <span class="fas fa-phone"></span>
