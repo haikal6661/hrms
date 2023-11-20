@@ -166,6 +166,25 @@ if ($hasStaff) {
               </p>
             </a>
           </li>
+          @role('Admin|HOD')
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-cog"></i>
+              <p>
+                Setting
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{route ('admin.announcement-list')}}" class="nav-link">
+                  <!-- <i class="far fa-circle nav-icon"></i> -->
+                  <p>Announcment</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          @endrole
           <li class="nav-item">
             <a class="dropdown-item" href="{{ route('logout') }}"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

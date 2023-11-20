@@ -9,6 +9,8 @@ $totalStaff = Staff::count();
 
 @endphp
 
+
+
 <style>
   .fc-view-container {
     background-color: grey;
@@ -177,7 +179,7 @@ $totalStaff = Staff::count();
 
         <!-- Main row -->
         <div class="row">
-
+        
         </div>
         <!-- /.row -->
       </div><!--/. container-fluid -->
@@ -185,8 +187,52 @@ $totalStaff = Staff::count();
     <!-- /.content -->
   </div>
 
+ 
+
+  <!-- Announcment Modal -->
+
+  <div class="modal fade" id="announcementModal" tabindex="-1" role="dialog" aria-labelledby="announcementModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Modal body text goes here.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    // Check for the loginSuccess parameter and call openModal if present
+    @if(session('loginSuccess'))
+        @php
+            // Unset the loginSuccess session variable to ensure the modal is shown only once
+            session()->forget('loginSuccess');
+        @endphp
+
+        window.onload = function () {
+            $('#announcementModal').modal('show');
+        };
+    @endif
+</script>
+
   <script>
+  
+  console.log('js loaded');
+  function openModal() {
+        document.getElementById('announcementModal').style.display = 'block';
+    }
+
     $(document).ready(function () {
+
             var SITEURL = "{{ url('/') }}";
             $.ajaxSetup({
                 headers: {
@@ -217,6 +263,7 @@ $totalStaff = Staff::count();
                 selectHelper: false,
             });
         });
+
         function displayMessage(message) {
             toastr.success(message, 'Event');            
         }
