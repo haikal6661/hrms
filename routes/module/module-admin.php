@@ -5,6 +5,7 @@ use App\Models\Announcement;
 use App\Models\Staff;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'admin', 'as' => 'admin', 'middleware' => 'auth'], function(){
@@ -67,7 +68,18 @@ Route::group(['prefix' => 'admin', 'as' => 'admin', 'middleware' => 'auth'], fun
             return response()->json([$announcement]);
         })->name('.announcement-details');
 
+        Route::delete('/announcement-delete', function (Request $request){
+            $AdminDAO = new AdminDAO();
+            return $AdminDAO->deleteAnnouncement($request);
+        })->name('.announcement-delete');
+
     });
+
+    Route::get('/announcement-display', function () {
+        $announcement = Announcement::where('status_id', 2)->first();
+        Log::info($announcement);
+        return response()->json(['announcement' => $announcement]);
+    })->name('.announcement-display');
 
 });
 

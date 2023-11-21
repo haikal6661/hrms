@@ -148,12 +148,12 @@ if ($hasStaff) {
                   <p>Role Management</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="pages/charts/flot.html" class="nav-link">
+              <!-- <li class="nav-item">
+                <a href="pages/charts/flot.html" class="nav-link"> -->
                   <!-- <i class="far fa-circle nav-icon"></i> -->
-                  <p>Permission Management</p>
+                  <!-- <p>Permission Management</p>
                 </a>
-              </li>
+              </li> -->
             </ul>
           </li>
           @endrole

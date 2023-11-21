@@ -66,11 +66,11 @@
                                             data-toggle="modal" data-target="#viewModal" data-id="{{$announcement->id}}"><i class="fa fa-eye"></i></button>
                                         </div>
                                         <div class="col-4">
-                                            <a href="{{route('admin.announcement-edit',['id' => $announcement->id])}}" class="btn btn-success btn-sm edit" role="button" title="Edit"><i class="fa fa-user-edit"></i></a>
+                                            <a href="{{route('admin.announcement-edit',['id' => $announcement->id])}}" class="btn btn-success btn-sm edit" role="button" title="Edit"><i class="fas fa-edit"></i></a>
                                         </div>
                                         <div class="col-4">
                                             <button type="button" class="btn btn-danger btn-sm remove" title="Remove" 
-                                            data-toggle="modal" data-target="#removeModal" data-id=""><i class="fa fa-trash-alt"></i></button>
+                                            data-toggle="modal" data-target="#removeModal" data-id="{{$announcement->id}}"><i class="fa fa-trash-alt"></i></button>
                                         </div>
                                     </div>
                                 </td>
@@ -116,11 +116,11 @@
                 <p class="login-box-msg"></p>
                 <input type="hidden" id="id" value="">
                 @csrf
-                    <p>Are you sure you want to remove this staff?</p>
+                    <p>Are you sure you want to remove this announcement?</p>
                 </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="removeStaff" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-trash-alt"></i> Remove</button>
+                    <button type="button" id="removeAnnouncement" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-trash-alt"></i> Remove</button>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <!-- <button type="submit" class="btn btn-primary">Register</button> -->
                 </div>
@@ -172,6 +172,44 @@ $(document).ready(function() {
         });
     });
 });
+
+$(".remove").click(function(){
+    var data = $(this).attr("data-id"); //GET THE DATA IN ATTR
+    event.preventDefault();
+    console.log(data);
+    $(".modal-body #id").val(data);
+    console.log('click');
+})
+
+$("#removeAnnouncement").click(function(){
+    var announcementID = document.getElementById("id").value;
+    var csrfToken = $('meta[name="csrf-token"]').attr('content');
+    
+    $.ajax({
+        url: "{{ route('admin.announcement-delete') }}?id=" + announcementID,
+        type: 'delete',
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        },
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'DELETE',
+        success: function(response) {
+            console.log(response);
+            toastr.success(response['message']);
+            // $('#response').html('<span class="text-success">'+response.message+'</span>').fadeIn(500).fadeOut(5000);
+            setTimeout(function (){
+                window.location = response['url'];
+            }, 3000);
+        },
+        error: function(response) {
+
+        }
+
+    });
+    console.log('removing announcement with id:',announcementID);
+})
 
 </script>
 

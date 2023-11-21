@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 class AdminDAO extends Controller
 {
+    //all controller for announcement
     public function storeAnnouncement(Request $request){
 
         $request->validate([
@@ -96,5 +97,20 @@ class AdminDAO extends Controller
                 'message' => 'Something went wrong.',
             ];
         }
+    }
+
+    public function deleteAnnouncement(Request $request){
+
+        $announcement_id = $request->id;
+
+        $announcement = Announcement::where('id',$announcement_id)->first();
+        $announcement->delete();
+
+        $url = route('admin.announcement-list');
+
+        return $respones = [
+            'message' => "Announcement has been deleted.",
+            'url' => $url,
+        ];
     }
 }

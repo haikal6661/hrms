@@ -195,13 +195,15 @@ $totalStaff = Staff::count();
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Modal title</h5>
+        <h5 class="modal-title">Announcement</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <p>Modal body text goes here.</p>
+      <label for="">Title</label>
+        <h5 id="modalTitle"></h5><hr>
+        <p id="modalBody"></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -219,7 +221,8 @@ $totalStaff = Staff::count();
         @endphp
 
         window.onload = function () {
-            $('#announcementModal').modal('show');
+
+            displayAnnouncement();
         };
     @endif
 </script>
@@ -227,9 +230,9 @@ $totalStaff = Staff::count();
   <script>
   
   console.log('js loaded');
-  function openModal() {
-        document.getElementById('announcementModal').style.display = 'block';
-    }
+  // function openModal() {
+  //       document.getElementById('announcementModal').style.display = 'block';
+  //   }
 
     $(document).ready(function () {
 
@@ -263,6 +266,41 @@ $totalStaff = Staff::count();
                 selectHelper: false,
             });
         });
+
+
+        // Make an Ajax request to the announcement-display route
+        function displayAnnouncement(){
+          $.ajax({
+            url: "{{ route('admin.announcement-display') }}",
+            type: 'GET',
+            dataType: 'json',
+            success: function(response) {
+              console.log('Response:', response);
+                // Check if the response has the announcement data
+                if (response.announcement) {
+                    // Display the modal or perform any other actions with the announcement data
+                    // For example, you can use Bootstrap's modal functions
+                    $('#modalTitle').html(response.announcement.title);
+                    $('#modalBody').html(response.announcement.body);
+
+                    setTimeout(function() {
+                      $('#announcementModal').modal('show');
+                    },500);
+                    
+                    // Update the modal content with the announcement details
+                    $('#modalTitle').html(response.announcement.title);
+                    $('#modalBody').html(response.announcement.body);
+                }
+            },
+            error: function(error) {
+                console.error('Error fetching announcement details:', error);
+            }
+        });
+        }
+
+        
+
+
 
         function displayMessage(message) {
             toastr.success(message, 'Event');            
