@@ -36,6 +36,11 @@ $totalStaff = Staff::count();
     white-space: normal;
   }
 
+  #modalBody .image img {
+      width: 300px;
+      height: auto;
+  }
+
 </style>
 
 <div class="content-wrapper">
