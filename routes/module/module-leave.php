@@ -196,23 +196,26 @@ Route::group(['prefix' => 'leave', 'as' => 'leave', 'middleware' => 'auth'], fun
 
     })->name('.leave-entitlement-edit');
 
-    //show leave form
-    Route::get('/leave-request-form', function(Request $request){
+    Route::group(['middleware' => ['permission:request leave']], function () {
+        
+        //show leave form
+        Route::get('/leave-request-form', function(Request $request){
 
-        $detail = [];
+            $detail = [];
 
-        $detail = Auth::user()->hasStaff;
-        $staff_id = $detail->id;
-        $entitlement = StaffLeave::where('staff_id', $staff_id)->get();
-        $refleavetype = RefLeaveType::all();
+            $detail = Auth::user()->hasStaff;
+            $staff_id = $detail->id;
+            $entitlement = StaffLeave::where('staff_id', $staff_id)->get();
+            $refleavetype = RefLeaveType::all();
 
-        return view('leave.leave-request-form', [
-            'refleavetype' => $refleavetype,
-            'detail' => $detail,
-            'entitlement' => $entitlement,
-        ]);
+            return view('leave.leave-request-form', [
+                'refleavetype' => $refleavetype,
+                'detail' => $detail,
+                'entitlement' => $entitlement,
+            ]);
 
-    })->name('.leave-request-form');
+        })->name('.leave-request-form');
+    });
 
     //store leave application
     Route::post('/leave-application', function(Request $request){

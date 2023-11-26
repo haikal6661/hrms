@@ -95,12 +95,14 @@ if ($hasStaff) {
               </p>
             </a>
             <ul class="nav nav-treeview">
+            @can('request leave')
               <li class="nav-item">
                 <a href="{{route ('leave.leave-request-form')}}" class="nav-link">
                   <!-- <i class="far fa-circle nav-icon"></i> -->
                   <p>Request a Leave</p>
                 </a>
               </li>
+            @endcan
               <li class="nav-item">
                 <a href="{{route ('leave.leave-application-list')}}" class="nav-link">
                   <!-- <i class="far fa-circle nav-icon"></i> -->

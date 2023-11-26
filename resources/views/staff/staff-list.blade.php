@@ -24,8 +24,10 @@
                 <div class="card">
                     <div style="display: inline-flex;" class="card-header">
                     <h3 class="card-title col-md-11">List of staff</h3>
+                    @can('create staff')
                     <button type="button" class="btn btn-success btn-block btn-sm" title="Register new staff" data-toggle="modal" data-target="#registerModal">
                         <i class="fa fa-plus"></i> Staff</button>
+                    @endcan
                 </div>
                 <div class="card-body">
                     <table class="table table-bordered">
