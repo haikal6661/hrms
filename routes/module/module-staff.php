@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 Route::group(['prefix' => 'staff', 'as' => 'staff', 'middleware' => 'auth'], function(){
 
 
-    Route::group(['middleware' => ['role:Admin']], function () {
+    Route::group(['middleware' => ['permission:create staff|view staff|update staff|delete staff']], function () {
 
         //register staff
         Route::post('/staff-store', function(Request $request){
@@ -40,28 +40,29 @@ Route::group(['prefix' => 'staff', 'as' => 'staff', 'middleware' => 'auth'], fun
         })->name('.staff-delete');
     });
 
-    
+    Route::group(['middleware' => ['permission:update staff']], function (){
 
-    //edit staff page
-    Route::get('/staff-edit', function(Request $request){
+        //edit staff page
+        Route::get('/staff-edit', function(Request $request){
 
-        $detail = [];
+            $detail = [];
 
-        $staff_id = $request->id;
+            $staff_id = $request->id;
 
-        $detail = Staff::find($staff_id);
-        $refposition = RefPosition::all();
-        $refdepartment = RefDepartment::all();
-        $refsupervisor = Staff::where('is_supervisor','!=', null)->get();
+            $detail = Staff::find($staff_id);
+            $refposition = RefPosition::all();
+            $refdepartment = RefDepartment::all();
+            $refsupervisor = Staff::where('is_supervisor','!=', null)->get();
 
-        return view('staff.staff-edit', [
-            'detail' => $detail,
-            'refposition' => $refposition,
-            'refdepartment' => $refdepartment,
-            'refsupervisor' => $refsupervisor,
-        ]);
+            return view('staff.staff-edit', [
+                'detail' => $detail,
+                'refposition' => $refposition,
+                'refdepartment' => $refdepartment,
+                'refsupervisor' => $refsupervisor,
+            ]);
 
-    })->name('.staff-edit');
+        })->name('.staff-edit');
+    });
 
     //view staff profile
     Route::get('/staff-profile', function(Request $request){

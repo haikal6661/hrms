@@ -27,7 +27,7 @@ Route::group(['prefix' => 'leave', 'as' => 'leave', 'middleware' => 'auth'], fun
     Route::get('/leave-balance', function(Request $request){
 
         $detail = [];
-        if(auth()->user()->roles->first()->name == "User"){
+        if(auth()->user()->hasRole('User')){
             $staff_id = auth()->user()->hasStaff->id;
             $detail = Staff::find($staff_id);
             $balance = StaffLeave::where('staff_id', $staff_id)->get();
@@ -58,7 +58,7 @@ Route::group(['prefix' => 'leave', 'as' => 'leave', 'middleware' => 'auth'], fun
     Route::get('/leave-entitlement', function(Request $request){
 
         $detail = [];
-        if(auth()->user()->roles->first()->name == "User"){
+        if(auth()->user()->hasRole('User')){
             $staff_id = auth()->user()->hasStaff->id;
             $detail = Staff::find($staff_id);
             $entitlement = StaffLeave::where('staff_id', $staff_id)->get();
@@ -135,9 +135,31 @@ Route::group(['prefix' => 'leave', 'as' => 'leave', 'middleware' => 'auth'], fun
     //subordinates leave application list
     Route::get('/leave-subordinates-application', function(Request $request){
 
-        $subordinates = Staff::where('supervisor_id', (auth()->user()->hasStaff->id))->get();
-        $leaveApplication = LeaveApplication::whereIn('staff_id', $subordinates->pluck('id'))->paginate(10);
-        $refleavetype = RefLeaveType::all();
+        $user = Auth::user();
+        $supervisorId = Auth::user()->hasStaff->id;
+        $department_id = Auth::user()->hasStaff->hasDepartment->id;
+
+        switch (true) {
+            case $user->hasRole('HOD'):
+                $subordinates = Staff::where(function ($query) use ($department_id, $supervisorId) {
+                    $query->where('department_id', $department_id)
+                          ->orWhere('supervisor_id', $supervisorId);
+                })
+                ->get();
+                $leaveApplication = LeaveApplication::whereIn('staff_id', $subordinates->pluck('id'))->paginate(10);
+                $refleavetype = RefLeaveType::all();
+
+                break;
+            
+            default:
+                $subordinates = Staff::where('supervisor_id', (auth()->user()->hasStaff->id))->get();
+                $leaveApplication = LeaveApplication::whereIn('staff_id', $subordinates->pluck('id'))->paginate(10);
+                $refleavetype = RefLeaveType::all();
+
+                break;
+        }
+
+        
         
         return view('leave.leave-subordinates-application', [
             'leave_application' => $leaveApplication,
@@ -160,41 +182,47 @@ Route::group(['prefix' => 'leave', 'as' => 'leave', 'middleware' => 'auth'], fun
 
     })->name('.leave-request-approve');
 
-    //leave balance edit
-    Route::get('/leave-balance-edit', function(Request $request){
+    Route::group(['middleware' => ['permission:update leave balance']], function (){
 
-        $detail = [];
+        //leave balance edit
+        Route::get('/leave-balance-edit', function(Request $request){
 
-        $staff_id = $request->id;
-        $detail = Staff::find($staff_id);
-        $balance = StaffLeave::where('staff_id', $staff_id)->get();
-        $refleavetype = RefLeaveType::all();
-        
-        return view('leave.leave-balance-edit', [
-            'detail' => $detail,
-            'balance' => $balance,
-            'refleavetype' => $refleavetype,
-        ]);
+            $detail = [];
 
-    })->name('.leave-balance-edit');
+            $staff_id = $request->id;
+            $detail = Staff::find($staff_id);
+            $balance = StaffLeave::where('staff_id', $staff_id)->get();
+            $refleavetype = RefLeaveType::all();
+            
+            return view('leave.leave-balance-edit', [
+                'detail' => $detail,
+                'balance' => $balance,
+                'refleavetype' => $refleavetype,
+            ]);
 
-    //leave entitlement edit
-    Route::get('/leave-entitlement-edit', function(Request $request){
+        })->name('.leave-balance-edit');
+    });
 
-        $detail = [];
+    Route::group(['middleware' => ['permission:update leave entitlement']], function (){
 
-        $staff_id = $request->id;
-        $detail = Staff::find($staff_id);
-        $entitlement = StaffLeave::where('staff_id', $staff_id)->get();
-        $refleavetype = RefLeaveType::all();
-        
-        return view('leave.leave-entitlement-edit', [
-            'detail' => $detail,
-            'entitlement' => $entitlement,
-            'refleavetype' => $refleavetype,
-        ]);
+        //leave entitlement edit
+        Route::get('/leave-entitlement-edit', function(Request $request){
 
-    })->name('.leave-entitlement-edit');
+            $detail = [];
+
+            $staff_id = $request->id;
+            $detail = Staff::find($staff_id);
+            $entitlement = StaffLeave::where('staff_id', $staff_id)->get();
+            $refleavetype = RefLeaveType::all();
+            
+            return view('leave.leave-entitlement-edit', [
+                'detail' => $detail,
+                'entitlement' => $entitlement,
+                'refleavetype' => $refleavetype,
+            ]);
+
+        })->name('.leave-entitlement-edit');
+    });
 
     Route::group(['middleware' => ['permission:request leave']], function () {
         

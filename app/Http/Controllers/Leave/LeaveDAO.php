@@ -18,6 +18,8 @@ use App\Notifications\SendEmailNewUser;
 use App\Notifications\SendLeaveRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use PhpParser\Node\Stmt\Switch_;
 
@@ -113,6 +115,25 @@ class LeaveDAO extends Controller
         $staff_id = $request->staff_id;
         $staff = Staff::find($staff_id);
         $supervisor = $staff->supervisor_id;
+        $department_id = $staff->department_id;
+
+        $hod = User::whereHas('roles', function ($query) {
+            $query->where('name', 'HOD');
+        })->whereHas('hasStaff', function ($query) use ($department_id) {
+            $query->where('department_id', $department_id);
+        })->first();
+
+        if ($staff->supervisor_id == null && $hod == null) {
+            return $response = [
+                'flag' => 2,
+                'url' => route('leave.leave-balance'),
+                'message' => 'Assign supervisor or HOD first',
+            ];
+        }elseif($staff->supervisor_id == null){
+            $hod_id = $hod->hasStaff->id;
+        }else{
+
+        }
 
         $request->validate([
             'get_start_date' => ['required'],
@@ -139,7 +160,28 @@ class LeaveDAO extends Controller
             ];
     
             $leaveApplication = LeaveApplication::create($data);
-            $this->sendEmail($supervisor,$leaveApplication);
+            if($supervisor != null && $hod != null){
+                if($supervisor == $hod->hasStaff->id){
+                    Log::info('hantar dkt hod sahaja');
+                    $flag = 1;
+                    $this->sendEmail($hod->hasStaff->id,$leaveApplication,$flag);
+                }else{
+                    Log::info('hantar dkt hod dan sv');
+                    $flag = 2;
+                    $this->sendEmail($hod->hasStaff->id,$leaveApplication,$flag);
+                    $this->sendEmail($supervisor,$leaveApplication,$flag);
+                }
+                // $this->sendEmail($hod,$leaveApplication);
+            }elseif($supervisor == null){
+                Log::info('hantar dkt hod');
+                $flag = 3;
+                $this->sendEmail($hod->hasStaff->id,$leaveApplication,$flag);
+            }else{
+                Log::info('hantar dkt sv');
+                $flag = null;
+                $this->sendEmail($supervisor,$leaveApplication,$flag);
+            }
+            
     
             $url = route('leave.leave-balance');
     
@@ -241,12 +283,17 @@ class LeaveDAO extends Controller
 
     }
 
-    public function sendEmail($information,$leaveApplication){
+    public function sendEmail($information,$leaveApplication,$flag){
         
         $supervisor = User::whereHas('hasStaff', function ($q) use ($information){
                     $q->where('id', $information);
         })->first();
 
+        if($flag){
+            $hod = User::whereHas('hasStaff', function ($q) use ($information){
+                $q->where('id', $information);
+            })->first();
+        }
 
         $details = [
             'subject' => 'Leave Request',
@@ -258,8 +305,20 @@ class LeaveDAO extends Controller
             'no_of_days' => $leaveApplication->no_of_days,
         ];
 
-        Mail::to($supervisor->email)->send(new LeaveRequest($details));
-        User::find($supervisor->id)->notify(new NotificationsLeaveRequest($leaveApplication->id));
+        if($flag == 1 || $flag == 3){
+            Mail::to($hod->email)->send(new LeaveRequest($details));
+            User::find($hod->id)->notify(new NotificationsLeaveRequest($leaveApplication->id));
+        }elseif($flag == 2){
+            Mail::to($hod->email)->send(new LeaveRequest($details));
+            Mail::to($supervisor->email)->send(new LeaveRequest($details));
+            User::find($hod->id)->notify(new NotificationsLeaveRequest($leaveApplication->id));
+            User::find($supervisor->id)->notify(new NotificationsLeaveRequest($leaveApplication->id));
+        }else{
+            Mail::to($supervisor->email)->send(new LeaveRequest($details));
+            User::find($supervisor->id)->notify(new NotificationsLeaveRequest($leaveApplication->id));
+        }
+
+        
     }
 
     public function sendEmailApproval($information){

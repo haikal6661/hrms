@@ -199,6 +199,8 @@ function submitLeave(id){
                 console.log(response.flag);
                 if(response.flag == 1){
                     toastr.warning(response['message']);
+                }if (response.flag == 2) {
+                    toastr.warning(response['message']);
                 }else{
                     toastr.success(response['message']);
                 }

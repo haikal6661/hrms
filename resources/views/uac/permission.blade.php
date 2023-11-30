@@ -46,7 +46,7 @@ $roles = [];
                         @endif
                         @foreach($permissionList as $permission)
                             <tr>
-                                <td>{{$loop->index+1}}</td>
+                                <td>{{$loop->index+1}}.</td>
                                 <td>{{$permission->name}}</td>
                                 @foreach($roleList as $role)
                                 <td style="text-align: center;">

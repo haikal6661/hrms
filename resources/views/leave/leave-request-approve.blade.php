@@ -21,7 +21,66 @@
     .col-sm-4 {
         margin-top: 12px;
     }
+
+    #loading-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.loader, .loader:before, .loader:after {
+  border-radius: 50%;
+  width: 2.5em;
+  height: 2.5em;
+  animation-fill-mode: both;
+  animation: bblFadInOut 1.8s infinite ease-in-out;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -1.25em;
+  margin-left: -0.25em;
+}
+
+.loader {
+  color: #FFF;
+  font-size: 7px;
+  text-indent: -9999em;
+  transform: translateZ(0);
+  animation-delay: -0.16s;
+}
+
+.loader:before,
+.loader:after {
+  content: '';
+  position: absolute;
+  top: 8px;
+}
+
+.loader:before {
+  left: -3.5em;
+  animation-delay: -0.32s;
+}
+
+.loader:after {
+  left: 3.5em;
+}
+
+@keyframes bblFadInOut {
+  0%, 80%, 100% { box-shadow: 0 2.5em 0 -1.3em }
+  40% { box-shadow: 0 2.5em 0 0 }
+}
+
+
 </style>
+
+<div id="loading-overlay">
+  <div class="loader"></div>
+</div>
 
 <div class="content-wrapper">
     <div class="content-header">
@@ -241,6 +300,8 @@ let formData = new FormData(document.getElementById('leave_form_approval'));
 formData.append("leave_id", $('#leave_id').val());
 $('#leave_form_approval .hasErr').html('');
 // parent.startLoading();
+
+showLoadingOverlay();
 $.ajax({
     url: "{{ route('leave.leave-approval') }}",
     type: 'post',
@@ -250,6 +311,7 @@ $.ajax({
     processData: false,
     method: 'POST',
     success: function(response) {
+        hideLoadingOverlay();
         console.log(response);
             toastr.success(response['message']);
         // $('#response').html('<span class="text-success">'+response.message+'</span>').fadeIn(500).fadeOut(5000);
@@ -258,6 +320,7 @@ $.ajax({
             }, 3000);
     },
     error: function(response) {
+        hideLoadingOverlay();
         toastr.error('Something went wrong');
 
         var errors = response.responseJSON.errors;
@@ -278,6 +341,18 @@ $.ajax({
     }
 
 });
+}
+
+function showLoadingOverlay() {
+    // You can implement this function to show your loading overlay
+    // For example, display an overlay with a spinner
+    $('#loading-overlay').show();
+}
+
+function hideLoadingOverlay() {
+    // You can implement this function to hide your loading overlay
+    // For example, hide the overlay
+    $('#loading-overlay').hide();
 }
 
 </script>

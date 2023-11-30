@@ -10,12 +10,14 @@ use Illuminate\Support\Facades\View;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
-Route::group(['prefix' => 'uac', 'as' => 'uac', 'middleware' => ['role:Admin']], function(){
+Route::group(['prefix' => 'uac', 'as' => 'uac', 'middleware' => 'auth'], function(){
 
     //show role page
     Route::get('/role-list', function(Request $request){
 
-        $roles = Role::withCount('users')->paginate(10);
+        $roles = Role::where('id', '!=', 1)
+             ->withCount('users')
+             ->paginate(10);
         $userList = User::all();
         
         return view('uac.role-list', [
@@ -58,7 +60,7 @@ Route::group(['prefix' => 'uac', 'as' => 'uac', 'middleware' => ['role:Admin']],
 
     Route::get('/permission', function (Request $request){
 
-        $roleList = Role::all();
+        $roleList = Role::where('id', '!=', 1)->get();
         $permissionList = Permission::paginate(10);
 
         return view('uac.permission', [

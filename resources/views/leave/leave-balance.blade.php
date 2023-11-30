@@ -76,9 +76,9 @@ $user_role = auth()->user()->roles->first()->name;
                                 <th style="width: 10px">No.</th>
                                 <th>Name</th>
                                 <th>Leaves</th>
-                                @role('Admin')
+                                @can('update leave balance')
                                 <th>Action</th>
-                                @endrole
+                                @endcan
                             </tr>
                         </thead>
                         <tbody>
@@ -111,7 +111,7 @@ $user_role = auth()->user()->roles->first()->name;
                                     @endfor
                                     </div>
                                 </td>
-                                @role('Admin')
+                                @can('update leave balance')
                                 <td>
                                 <div class="row">
                                         <div class="col-4">
@@ -119,7 +119,7 @@ $user_role = auth()->user()->roles->first()->name;
                                         </div>
                                     </div>
                                 </td>
-                                @endrole
+                                @endcan
                             </tr>
                             @endforeach
                         </tbody>

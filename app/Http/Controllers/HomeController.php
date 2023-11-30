@@ -25,6 +25,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        date_default_timezone_set('Asia/Kuala_Lumpur');
         //get current month leaves application
         $currentMonth = date("m");
         $month = LeaveApplication::whereMonth('start_date', $currentMonth)->get();

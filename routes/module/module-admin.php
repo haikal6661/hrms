@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'admin', 'as' => 'admin', 'middleware' => 'auth'], function(){
 
-    Route::group(['middleware' => ['role:Admin|HOD']], function () {
+    Route::group(['middleware' => ['permission:create announcement']], function () {
 
         //all announcement route for admin
         Route::get('/announcement-list', function (Request $request){

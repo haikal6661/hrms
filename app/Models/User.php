@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Staff::class, 'user_id');
     }
+
+    public function isHODAndDepartment($departmentId)
+    {
+        return $this->hasRole('HOD') && $this->hasStaff->hasDepartment->id == $departmentId;
+    }
 }

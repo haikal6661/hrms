@@ -60,13 +60,17 @@
                                             <button type="button" class="btn btn-primary btn-sm view" title="View" 
                                             data-toggle="modal" data-target="#viewModal" data-id="{{$staff->id}}"><i class="fa fa-eye"></i></button>
                                         </div>
+                                        @can('update staff')
                                         <div class="col-4">
                                             <a href="{{route('staff.staff-edit',['id' => $staff->id])}}" class="btn btn-success btn-sm edit" role="button" title="Edit"><i class="fa fa-user-edit"></i></a>
                                         </div>
+                                        @endcan
+                                        @can('delete staff')
                                         <div class="col-4">
                                             <button type="button" class="btn btn-danger btn-sm remove" title="Remove" 
                                             data-toggle="modal" data-target="#removeModal" data-id="{{$staff->id}}"><i class="fa fa-trash-alt"></i></button>
                                         </div>
+                                        @endcan
                                     </div>
                                 </td>
                             </tr>

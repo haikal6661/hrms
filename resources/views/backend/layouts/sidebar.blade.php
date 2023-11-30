@@ -70,7 +70,7 @@ if ($hasStaff) {
               </p>
             </a>
           </li>
-          @role('Admin')
+          @can('create staff')
           <li class="nav-item">
             <a href="{{route ('staff.staff-list')}}" class="nav-link">
               <i class="nav-icon fas fa-users"></i>
@@ -80,7 +80,7 @@ if ($hasStaff) {
               </p>
             </a>
           </li>
-          @endrole
+          @endcan
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
@@ -109,7 +109,7 @@ if ($hasStaff) {
                   <p>Leave Applications</p>
                 </a>
               </li>
-              @if(auth()->user()->hasStaff?->is_supervisor == 1)
+              @if(auth()->user()->hasStaff?->is_supervisor == 1 || auth()->user()->hasRole('HOD'))
               <li class="nav-item">
                 <a href="{{route ('leave.leave-subordinates-application')}}" class="nav-link">
                   <!-- <i class="far fa-circle nav-icon"></i> -->
@@ -134,7 +134,7 @@ if ($hasStaff) {
               </li>
             </ul>
           </li>
-          @role('Admin')
+          @can('view uac')
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-user-cog"></i>
@@ -158,7 +158,7 @@ if ($hasStaff) {
               </li>
             </ul>
           </li>
-          @endrole
+          @endcan
           <li class="nav-item">
             <a href="{{route ('staff.staff-profile')}}" class="nav-link">
               <i class="nav-icon fas fa-user"></i>
@@ -168,7 +168,7 @@ if ($hasStaff) {
               </p>
             </a>
           </li>
-          @role('Admin|HOD')
+          @can('view setting')
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-cog"></i>
@@ -177,6 +177,7 @@ if ($hasStaff) {
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
+            @can('create announcement')
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="{{route ('admin.announcement-list')}}" class="nav-link">
@@ -185,8 +186,9 @@ if ($hasStaff) {
                 </a>
               </li>
             </ul>
+            @endcan
           </li>
-          @endrole
+          @endcan
           <li class="nav-item">
             <a class="dropdown-item" href="{{ route('logout') }}"
                 onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
